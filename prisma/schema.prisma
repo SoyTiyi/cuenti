@@ -13,3 +13,75 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id           Int       @id @default(autoincrement())
+  name         String
+  lastname     String
+  email        String    @unique
+  password     String
+  profileImage String?
+  companies    Company[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Company {
+  id           Int       @id @default(autoincrement())
+  name         String
+  address      String
+  description  String
+  companyImage String?
+  owner        User      @relation(fields: [ownerId], references: [id])
+  ownerId      Int
+  services     Service[]
+  clients      Client[]
+  sales        Sale[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  price       Decimal  @db.Decimal(10, 2)
+  company     Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId   Int
+  sales       Sale[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Client {
+  id        Int      @id @default(autoincrement())
+  name      String
+  phone     String?  
+  email     String?
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId Int
+  sales     Sale[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([email, companyId])
+}
+
+model Sale {
+  id          Int       @id @default(autoincrement())
+  amount      Decimal   @db.Decimal(10, 2)
+  isPaid      Boolean   @default(false)  
+  paidAmount  Decimal   @default(0) @db.Decimal(10, 2) 
+  paymentDate DateTime? 
+  dueDate     DateTime? 
+  notes       String?   
+  company     Company   @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  companyId   Int
+  service     Service   @relation(fields: [serviceId], references: [id])
+  serviceId   Int
+  client      Client    @relation(fields: [clientId], references: [id])
+  clientId    Int
+  saleDate    DateTime  @default(now()) 
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
