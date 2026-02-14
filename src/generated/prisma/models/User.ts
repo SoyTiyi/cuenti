@@ -44,6 +44,7 @@ export type UserMinAggregateOutputType = {
   updatedAt: Date | null
   auth0Id: string | null
   needsOnboarding: boolean | null
+  isActive: boolean | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -56,6 +57,7 @@ export type UserMaxAggregateOutputType = {
   updatedAt: Date | null
   auth0Id: string | null
   needsOnboarding: boolean | null
+  isActive: boolean | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -68,6 +70,7 @@ export type UserCountAggregateOutputType = {
   updatedAt: number
   auth0Id: number
   needsOnboarding: number
+  isActive: number
   _all: number
 }
 
@@ -90,6 +93,7 @@ export type UserMinAggregateInputType = {
   updatedAt?: true
   auth0Id?: true
   needsOnboarding?: true
+  isActive?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -102,6 +106,7 @@ export type UserMaxAggregateInputType = {
   updatedAt?: true
   auth0Id?: true
   needsOnboarding?: true
+  isActive?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -114,6 +119,7 @@ export type UserCountAggregateInputType = {
   updatedAt?: true
   auth0Id?: true
   needsOnboarding?: true
+  isActive?: true
   _all?: true
 }
 
@@ -213,6 +219,7 @@ export type UserGroupByOutputType = {
   updatedAt: Date
   auth0Id: string
   needsOnboarding: boolean
+  isActive: boolean
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -248,6 +255,7 @@ export type UserWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   auth0Id?: Prisma.StringFilter<"User"> | string
   needsOnboarding?: Prisma.BoolFilter<"User"> | boolean
+  isActive?: Prisma.BoolFilter<"User"> | boolean
   companies?: Prisma.CompanyListRelationFilter
 }
 
@@ -261,6 +269,7 @@ export type UserOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   auth0Id?: Prisma.SortOrder
   needsOnboarding?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   companies?: Prisma.CompanyOrderByRelationAggregateInput
 }
 
@@ -277,6 +286,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   needsOnboarding?: Prisma.BoolFilter<"User"> | boolean
+  isActive?: Prisma.BoolFilter<"User"> | boolean
   companies?: Prisma.CompanyListRelationFilter
 }, "id" | "email" | "auth0Id">
 
@@ -290,6 +300,7 @@ export type UserOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   auth0Id?: Prisma.SortOrder
   needsOnboarding?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -310,6 +321,7 @@ export type UserScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   auth0Id?: Prisma.StringWithAggregatesFilter<"User"> | string
   needsOnboarding?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  isActive?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
 }
 
 export type UserCreateInput = {
@@ -321,6 +333,7 @@ export type UserCreateInput = {
   updatedAt?: Date | string
   auth0Id: string
   needsOnboarding?: boolean
+  isActive?: boolean
   companies?: Prisma.CompanyCreateNestedManyWithoutOwnerInput
 }
 
@@ -334,6 +347,7 @@ export type UserUncheckedCreateInput = {
   updatedAt?: Date | string
   auth0Id: string
   needsOnboarding?: boolean
+  isActive?: boolean
   companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutOwnerInput
 }
 
@@ -346,6 +360,7 @@ export type UserUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auth0Id?: Prisma.StringFieldUpdateOperationsInput | string
   needsOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   companies?: Prisma.CompanyUpdateManyWithoutOwnerNestedInput
 }
 
@@ -359,6 +374,7 @@ export type UserUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auth0Id?: Prisma.StringFieldUpdateOperationsInput | string
   needsOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   companies?: Prisma.CompanyUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
@@ -372,6 +388,7 @@ export type UserCreateManyInput = {
   updatedAt?: Date | string
   auth0Id: string
   needsOnboarding?: boolean
+  isActive?: boolean
 }
 
 export type UserUpdateManyMutationInput = {
@@ -383,6 +400,7 @@ export type UserUpdateManyMutationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auth0Id?: Prisma.StringFieldUpdateOperationsInput | string
   needsOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -395,6 +413,7 @@ export type UserUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auth0Id?: Prisma.StringFieldUpdateOperationsInput | string
   needsOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -407,6 +426,7 @@ export type UserCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   auth0Id?: Prisma.SortOrder
   needsOnboarding?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
@@ -423,6 +443,7 @@ export type UserMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   auth0Id?: Prisma.SortOrder
   needsOnboarding?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -435,6 +456,7 @@ export type UserMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   auth0Id?: Prisma.SortOrder
   needsOnboarding?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
@@ -493,6 +515,7 @@ export type UserCreateWithoutCompaniesInput = {
   updatedAt?: Date | string
   auth0Id: string
   needsOnboarding?: boolean
+  isActive?: boolean
 }
 
 export type UserUncheckedCreateWithoutCompaniesInput = {
@@ -505,6 +528,7 @@ export type UserUncheckedCreateWithoutCompaniesInput = {
   updatedAt?: Date | string
   auth0Id: string
   needsOnboarding?: boolean
+  isActive?: boolean
 }
 
 export type UserCreateOrConnectWithoutCompaniesInput = {
@@ -532,6 +556,7 @@ export type UserUpdateWithoutCompaniesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auth0Id?: Prisma.StringFieldUpdateOperationsInput | string
   needsOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserUncheckedUpdateWithoutCompaniesInput = {
@@ -544,6 +569,7 @@ export type UserUncheckedUpdateWithoutCompaniesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   auth0Id?: Prisma.StringFieldUpdateOperationsInput | string
   needsOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -587,6 +613,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   auth0Id?: boolean
   needsOnboarding?: boolean
+  isActive?: boolean
   companies?: boolean | Prisma.User$companiesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -601,6 +628,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   auth0Id?: boolean
   needsOnboarding?: boolean
+  isActive?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -613,6 +641,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   auth0Id?: boolean
   needsOnboarding?: boolean
+  isActive?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -625,9 +654,10 @@ export type UserSelectScalar = {
   updatedAt?: boolean
   auth0Id?: boolean
   needsOnboarding?: boolean
+  isActive?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "lastname" | "email" | "profileImage" | "createdAt" | "updatedAt" | "auth0Id" | "needsOnboarding", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "lastname" | "email" | "profileImage" | "createdAt" | "updatedAt" | "auth0Id" | "needsOnboarding" | "isActive", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   companies?: boolean | Prisma.User$companiesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -650,6 +680,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     updatedAt: Date
     auth0Id: string
     needsOnboarding: boolean
+    isActive: boolean
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1083,6 +1114,7 @@ export interface UserFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly auth0Id: Prisma.FieldRef<"User", 'String'>
   readonly needsOnboarding: Prisma.FieldRef<"User", 'Boolean'>
+  readonly isActive: Prisma.FieldRef<"User", 'Boolean'>
 }
     
 

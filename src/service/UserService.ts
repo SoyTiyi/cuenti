@@ -18,6 +18,7 @@ class UserService {
                 profileImage: data.picture,
                 auth0Id: data.auth0Id,
                 needsOnboarding: true,
+                isActive: false,
             },
         });
     }

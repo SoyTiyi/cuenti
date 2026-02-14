@@ -4,6 +4,7 @@ export interface CreateUserDTO {
     name: string;
     picture: string;
     needsOnboarding: boolean;
+    isActive: boolean;
 }
 
 export interface UserOnboardingDTO {

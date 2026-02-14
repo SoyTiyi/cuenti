@@ -22,6 +22,7 @@ export const auth0 = new Auth0Client({
           name: session.user.name ?? "",
           picture: session.user.picture ?? "",
           needsOnboarding: true,
+          isActive: false,
         });
 
         return NextResponse.redirect(
