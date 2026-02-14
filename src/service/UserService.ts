@@ -2,6 +2,13 @@ import prisma from "../lib/prisma";
 import { CreateUserDTO, UserOnboardingDTO } from "../lib/types/user/types";
 
 class UserService {
+
+    async getUserByEmail(email: string) {
+        return prisma.user.findUnique({
+            where: { email },
+        });
+    }
+
     async createUser(data: CreateUserDTO) {
         return prisma.user.create({
             data: {
