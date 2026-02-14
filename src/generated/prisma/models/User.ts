@@ -39,10 +39,11 @@ export type UserMinAggregateOutputType = {
   name: string | null
   lastname: string | null
   email: string | null
-  password: string | null
   profileImage: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  auth0Id: string | null
+  needsOnboarding: boolean | null
 }
 
 export type UserMaxAggregateOutputType = {
@@ -50,10 +51,11 @@ export type UserMaxAggregateOutputType = {
   name: string | null
   lastname: string | null
   email: string | null
-  password: string | null
   profileImage: string | null
   createdAt: Date | null
   updatedAt: Date | null
+  auth0Id: string | null
+  needsOnboarding: boolean | null
 }
 
 export type UserCountAggregateOutputType = {
@@ -61,10 +63,11 @@ export type UserCountAggregateOutputType = {
   name: number
   lastname: number
   email: number
-  password: number
   profileImage: number
   createdAt: number
   updatedAt: number
+  auth0Id: number
+  needsOnboarding: number
   _all: number
 }
 
@@ -82,10 +85,11 @@ export type UserMinAggregateInputType = {
   name?: true
   lastname?: true
   email?: true
-  password?: true
   profileImage?: true
   createdAt?: true
   updatedAt?: true
+  auth0Id?: true
+  needsOnboarding?: true
 }
 
 export type UserMaxAggregateInputType = {
@@ -93,10 +97,11 @@ export type UserMaxAggregateInputType = {
   name?: true
   lastname?: true
   email?: true
-  password?: true
   profileImage?: true
   createdAt?: true
   updatedAt?: true
+  auth0Id?: true
+  needsOnboarding?: true
 }
 
 export type UserCountAggregateInputType = {
@@ -104,10 +109,11 @@ export type UserCountAggregateInputType = {
   name?: true
   lastname?: true
   email?: true
-  password?: true
   profileImage?: true
   createdAt?: true
   updatedAt?: true
+  auth0Id?: true
+  needsOnboarding?: true
   _all?: true
 }
 
@@ -202,10 +208,11 @@ export type UserGroupByOutputType = {
   name: string
   lastname: string
   email: string
-  password: string
   profileImage: string | null
   createdAt: Date
   updatedAt: Date
+  auth0Id: string
+  needsOnboarding: boolean
   _count: UserCountAggregateOutputType | null
   _avg: UserAvgAggregateOutputType | null
   _sum: UserSumAggregateOutputType | null
@@ -236,10 +243,11 @@ export type UserWhereInput = {
   name?: Prisma.StringFilter<"User"> | string
   lastname?: Prisma.StringFilter<"User"> | string
   email?: Prisma.StringFilter<"User"> | string
-  password?: Prisma.StringFilter<"User"> | string
   profileImage?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  auth0Id?: Prisma.StringFilter<"User"> | string
+  needsOnboarding?: Prisma.BoolFilter<"User"> | boolean
   companies?: Prisma.CompanyListRelationFilter
 }
 
@@ -248,37 +256,40 @@ export type UserOrderByWithRelationInput = {
   name?: Prisma.SortOrder
   lastname?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  password?: Prisma.SortOrder
   profileImage?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  auth0Id?: Prisma.SortOrder
+  needsOnboarding?: Prisma.SortOrder
   companies?: Prisma.CompanyOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
   id?: number
   email?: string
+  auth0Id?: string
   AND?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   OR?: Prisma.UserWhereInput[]
   NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[]
   name?: Prisma.StringFilter<"User"> | string
   lastname?: Prisma.StringFilter<"User"> | string
-  password?: Prisma.StringFilter<"User"> | string
   profileImage?: Prisma.StringNullableFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
+  needsOnboarding?: Prisma.BoolFilter<"User"> | boolean
   companies?: Prisma.CompanyListRelationFilter
-}, "id" | "email">
+}, "id" | "email" | "auth0Id">
 
 export type UserOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   lastname?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  password?: Prisma.SortOrder
   profileImage?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  auth0Id?: Prisma.SortOrder
+  needsOnboarding?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
   _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
@@ -294,20 +305,22 @@ export type UserScalarWhereWithAggregatesInput = {
   name?: Prisma.StringWithAggregatesFilter<"User"> | string
   lastname?: Prisma.StringWithAggregatesFilter<"User"> | string
   email?: Prisma.StringWithAggregatesFilter<"User"> | string
-  password?: Prisma.StringWithAggregatesFilter<"User"> | string
   profileImage?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
+  auth0Id?: Prisma.StringWithAggregatesFilter<"User"> | string
+  needsOnboarding?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
 }
 
 export type UserCreateInput = {
   name: string
   lastname: string
   email: string
-  password: string
   profileImage?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  auth0Id: string
+  needsOnboarding?: boolean
   companies?: Prisma.CompanyCreateNestedManyWithoutOwnerInput
 }
 
@@ -316,10 +329,11 @@ export type UserUncheckedCreateInput = {
   name: string
   lastname: string
   email: string
-  password: string
   profileImage?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  auth0Id: string
+  needsOnboarding?: boolean
   companies?: Prisma.CompanyUncheckedCreateNestedManyWithoutOwnerInput
 }
 
@@ -327,10 +341,11 @@ export type UserUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auth0Id?: Prisma.StringFieldUpdateOperationsInput | string
+  needsOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   companies?: Prisma.CompanyUpdateManyWithoutOwnerNestedInput
 }
 
@@ -339,10 +354,11 @@ export type UserUncheckedUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auth0Id?: Prisma.StringFieldUpdateOperationsInput | string
+  needsOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
   companies?: Prisma.CompanyUncheckedUpdateManyWithoutOwnerNestedInput
 }
 
@@ -351,20 +367,22 @@ export type UserCreateManyInput = {
   name: string
   lastname: string
   email: string
-  password: string
   profileImage?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  auth0Id: string
+  needsOnboarding?: boolean
 }
 
 export type UserUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auth0Id?: Prisma.StringFieldUpdateOperationsInput | string
+  needsOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserUncheckedUpdateManyInput = {
@@ -372,10 +390,11 @@ export type UserUncheckedUpdateManyInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auth0Id?: Prisma.StringFieldUpdateOperationsInput | string
+  needsOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserCountOrderByAggregateInput = {
@@ -383,10 +402,11 @@ export type UserCountOrderByAggregateInput = {
   name?: Prisma.SortOrder
   lastname?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  password?: Prisma.SortOrder
   profileImage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  auth0Id?: Prisma.SortOrder
+  needsOnboarding?: Prisma.SortOrder
 }
 
 export type UserAvgOrderByAggregateInput = {
@@ -398,10 +418,11 @@ export type UserMaxOrderByAggregateInput = {
   name?: Prisma.SortOrder
   lastname?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  password?: Prisma.SortOrder
   profileImage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  auth0Id?: Prisma.SortOrder
+  needsOnboarding?: Prisma.SortOrder
 }
 
 export type UserMinOrderByAggregateInput = {
@@ -409,10 +430,11 @@ export type UserMinOrderByAggregateInput = {
   name?: Prisma.SortOrder
   lastname?: Prisma.SortOrder
   email?: Prisma.SortOrder
-  password?: Prisma.SortOrder
   profileImage?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  auth0Id?: Prisma.SortOrder
+  needsOnboarding?: Prisma.SortOrder
 }
 
 export type UserSumOrderByAggregateInput = {
@@ -434,6 +456,10 @@ export type NullableStringFieldUpdateOperationsInput = {
 
 export type DateTimeFieldUpdateOperationsInput = {
   set?: Date | string
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -462,10 +488,11 @@ export type UserCreateWithoutCompaniesInput = {
   name: string
   lastname: string
   email: string
-  password: string
   profileImage?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  auth0Id: string
+  needsOnboarding?: boolean
 }
 
 export type UserUncheckedCreateWithoutCompaniesInput = {
@@ -473,10 +500,11 @@ export type UserUncheckedCreateWithoutCompaniesInput = {
   name: string
   lastname: string
   email: string
-  password: string
   profileImage?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  auth0Id: string
+  needsOnboarding?: boolean
 }
 
 export type UserCreateOrConnectWithoutCompaniesInput = {
@@ -499,10 +527,11 @@ export type UserUpdateWithoutCompaniesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auth0Id?: Prisma.StringFieldUpdateOperationsInput | string
+  needsOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type UserUncheckedUpdateWithoutCompaniesInput = {
@@ -510,10 +539,11 @@ export type UserUncheckedUpdateWithoutCompaniesInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
   lastname?: Prisma.StringFieldUpdateOperationsInput | string
   email?: Prisma.StringFieldUpdateOperationsInput | string
-  password?: Prisma.StringFieldUpdateOperationsInput | string
   profileImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  auth0Id?: Prisma.StringFieldUpdateOperationsInput | string
+  needsOnboarding?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -552,10 +582,11 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   name?: boolean
   lastname?: boolean
   email?: boolean
-  password?: boolean
   profileImage?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  auth0Id?: boolean
+  needsOnboarding?: boolean
   companies?: boolean | Prisma.User$companiesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
@@ -565,10 +596,11 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   lastname?: boolean
   email?: boolean
-  password?: boolean
   profileImage?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  auth0Id?: boolean
+  needsOnboarding?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -576,10 +608,11 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   name?: boolean
   lastname?: boolean
   email?: boolean
-  password?: boolean
   profileImage?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  auth0Id?: boolean
+  needsOnboarding?: boolean
 }, ExtArgs["result"]["user"]>
 
 export type UserSelectScalar = {
@@ -587,13 +620,14 @@ export type UserSelectScalar = {
   name?: boolean
   lastname?: boolean
   email?: boolean
-  password?: boolean
   profileImage?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  auth0Id?: boolean
+  needsOnboarding?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "lastname" | "email" | "password" | "profileImage" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "lastname" | "email" | "profileImage" | "createdAt" | "updatedAt" | "auth0Id" | "needsOnboarding", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   companies?: boolean | Prisma.User$companiesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
@@ -611,10 +645,11 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     name: string
     lastname: string
     email: string
-    password: string
     profileImage: string | null
     createdAt: Date
     updatedAt: Date
+    auth0Id: string
+    needsOnboarding: boolean
   }, ExtArgs["result"]["user"]>
   composites: {}
 }
@@ -1043,10 +1078,11 @@ export interface UserFieldRefs {
   readonly name: Prisma.FieldRef<"User", 'String'>
   readonly lastname: Prisma.FieldRef<"User", 'String'>
   readonly email: Prisma.FieldRef<"User", 'String'>
-  readonly password: Prisma.FieldRef<"User", 'String'>
   readonly profileImage: Prisma.FieldRef<"User", 'String'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
+  readonly auth0Id: Prisma.FieldRef<"User", 'String'>
+  readonly needsOnboarding: Prisma.FieldRef<"User", 'Boolean'>
 }
     
 

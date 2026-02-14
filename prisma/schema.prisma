@@ -19,11 +19,12 @@ model User {
   name         String
   lastname     String
   email        String    @unique
-  password     String
   profileImage String?
   companies    Company[]
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
+  auth0Id      String    @unique
+  needsOnboarding Boolean @default(true)
 }
 
 model Company {
