@@ -1,4 +1,4 @@
-import prisma from "../lib/prisma";
+import prisma from "@/lib/prisma";
 import { CreateUserDTO, UserOnboardingDTO } from "../lib/types/user/types";
 
 class UserService {

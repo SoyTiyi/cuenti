@@ -42,3 +42,8 @@ export type Client = Prisma.ClientModel
  * 
  */
 export type Sale = Prisma.SaleModel
+/**
+ * Model Category
+ * 
+ */
+export type Category = Prisma.CategoryModel
