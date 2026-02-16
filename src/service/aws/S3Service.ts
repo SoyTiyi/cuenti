@@ -23,9 +23,9 @@ class S3Service {
     });
   }
 
-  async uploadFile(file: File, key: string): Promise<string> {
+  async uploadFile(file: File, key: string, bucketName: string): Promise<string> {
     const uploadParams = {
-      Bucket: process.env.S3_BUCKET_NAME!,
+      Bucket: bucketName,
       Key: key,
       Body: file,
       ContentType: file.type,

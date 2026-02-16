@@ -187,7 +187,7 @@ export function useOnboarding() {
       }
 
       if (logo) {
-        const logoUrl = await s3Service.uploadFile(logo, `logos/${Date.now()}_${logo.name}`);
+        const logoUrl = await s3Service.uploadFile(logo, `logos/${Date.now()}_${logo.name}`, process.env.PROFILE_BUCKET!);
         data.logoUrl = logoUrl;
       }
 
