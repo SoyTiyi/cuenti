@@ -3,7 +3,7 @@ import { Upload } from "@aws-sdk/lib-storage";
 
 class S3Service {
   private getS3Client() {
-    if (process.env.environment !== "production") {
+    if (process.env.ENVIRONMENT !== "production") {
       return new S3Client({
         endpoint: process.env.MINIO_ENDPOINT,
         region: process.env.AWS_REGION,
