@@ -1,12 +1,15 @@
+import "dotenv/config";
 import { S3Client } from "@aws-sdk/client-s3";
 import { Upload } from "@aws-sdk/lib-storage";
 
 class S3Service {
   private getS3Client() {
-    if (process.env.ENVIRONMENT !== "production") {
+    const region = process.env.AWS_REGION || "us-east-1";
+
+    if (process.env.ENVIRONMENT != "production") {
       return new S3Client({
         endpoint: process.env.MINIO_ENDPOINT,
-        region: process.env.AWS_REGION,
+        region: region,
         credentials: {
           accessKeyId: process.env.MINIO_ACCESS_KEY!,
           secretAccessKey: process.env.MINIO_SECRET_KEY!,
@@ -15,7 +18,7 @@ class S3Service {
       });
     }
     return new S3Client({
-      region: process.env.AWS_REGION,
+      region: region,
       credentials: {
         accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
         secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
