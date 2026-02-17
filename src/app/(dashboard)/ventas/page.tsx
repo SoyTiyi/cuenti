@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
-import { Eye, Check, MessageCircle, X, User, Package, DollarSign, Calendar, FileText, ChevronDown } from "lucide-react";
+import { Eye, Check, MessageCircle, X, User, Package, DollarSign, Calendar, FileText, ChevronDown, UserPlus, Phone, Mail, ArrowLeft } from "lucide-react";
 
 const ventasDelMes = 24;
 const ventasPendientes = 8;
@@ -135,8 +135,11 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
   const [notas, setNotas] = useState("");
   const [showClienteDropdown, setShowClienteDropdown] = useState(false);
   const [showServicioDropdown, setShowServicioDropdown] = useState(false);
+  const [clientes, setClientes] = useState(clientesMock);
+  const [creandoCliente, setCreandoCliente] = useState(false);
+  const [nuevoCliente, setNuevoCliente] = useState({ name: "", phone: "", email: "" });
 
-  const clienteSeleccionado = clientesMock.find((c) => c.id === clienteId);
+  const clienteSeleccionado = clientes.find((c) => c.id === clienteId);
   const servicioSeleccionado = serviciosMock.find((s) => s.id === servicioId);
 
   const handleServicioSelect = (id: number) => {
@@ -146,6 +149,17 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
       setMonto(servicio.price.toString());
     }
     setShowServicioDropdown(false);
+  };
+
+  const handleCrearCliente = () => {
+    if (!nuevoCliente.name.trim()) return;
+    const newId = Math.max(...clientes.map((c) => c.id)) + 1;
+    const cliente = { id: newId, name: nuevoCliente.name, email: nuevoCliente.email, phone: nuevoCliente.phone };
+    setClientes([...clientes, cliente]);
+    setClienteId(newId);
+    setNuevoCliente({ name: "", phone: "", email: "" });
+    setCreandoCliente(false);
+    setShowClienteDropdown(false);
   };
 
   const handleSubmit = () => {
@@ -161,6 +175,7 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
   };
 
   const isFormValid = clienteId && servicioId && monto && parseFloat(monto) > 0 && fechaVenta;
+  const isNuevoClienteValid = nuevoCliente.name.trim().length > 0;
 
   if (!isOpen) return null;
 
@@ -208,23 +223,96 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
                 <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 transition-transform ${showClienteDropdown ? "rotate-180" : ""}`} />
 
                 {showClienteDropdown && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
-                    {clientesMock.map((cliente) => (
-                      <button
-                        key={cliente.id}
-                        type="button"
-                        onClick={() => {
-                          setClienteId(cliente.id);
-                          setShowClienteDropdown(false);
-                        }}
-                        className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer ${
-                          clienteId === cliente.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"
-                        }`}
-                      >
-                        <span className="font-medium">{cliente.name}</span>
-                        <span className="text-neutral-400 ml-2">{cliente.email}</span>
-                      </button>
-                    ))}
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-200 rounded-xl shadow-lg overflow-hidden">
+                    {creandoCliente ? (
+                      <div className="p-3">
+                        <div className="flex items-center gap-2 mb-3">
+                          <button
+                            type="button"
+                            onClick={() => setCreandoCliente(false)}
+                            className="p-1 text-neutral-400 hover:text-neutral-600 rounded transition-colors cursor-pointer"
+                          >
+                            <ArrowLeft size={16} />
+                          </button>
+                          <span className="text-sm font-medium text-neutral-700">Nuevo cliente</span>
+                        </div>
+                        <div className="space-y-2.5">
+                          <div className="relative">
+                            <User className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400" />
+                            <input
+                              type="text"
+                              placeholder="Nombre *"
+                              value={nuevoCliente.name}
+                              onChange={(e) => setNuevoCliente({ ...nuevoCliente, name: e.target.value })}
+                              className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300"
+                            />
+                          </div>
+                          <div className="relative">
+                            <Phone className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400" />
+                            <input
+                              type="tel"
+                              placeholder="Teléfono"
+                              value={nuevoCliente.phone}
+                              onChange={(e) => setNuevoCliente({ ...nuevoCliente, phone: e.target.value })}
+                              className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300"
+                            />
+                          </div>
+                          <div className="relative">
+                            <Mail className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400" />
+                            <input
+                              type="email"
+                              placeholder="Correo"
+                              value={nuevoCliente.email}
+                              onChange={(e) => setNuevoCliente({ ...nuevoCliente, email: e.target.value })}
+                              className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300"
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={handleCrearCliente}
+                            disabled={!isNuevoClienteValid}
+                            className={`w-full py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
+                              isNuevoClienteValid
+                                ? "bg-primary-500 text-white hover:bg-primary-600"
+                                : "bg-neutral-100 text-neutral-400 cursor-not-allowed"
+                            }`}
+                          >
+                            Agregar cliente
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="max-h-36 overflow-y-auto">
+                          {clientes.map((cliente) => (
+                            <button
+                              key={cliente.id}
+                              type="button"
+                              onClick={() => {
+                                setClienteId(cliente.id);
+                                setShowClienteDropdown(false);
+                              }}
+                              className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer ${
+                                clienteId === cliente.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"
+                              }`}
+                            >
+                              <span className="font-medium">{cliente.name}</span>
+                              {cliente.email && <span className="text-neutral-400 ml-2">{cliente.email}</span>}
+                            </button>
+                          ))}
+                        </div>
+                        <div className="border-t border-neutral-100">
+                          <button
+                            type="button"
+                            onClick={() => setCreandoCliente(true)}
+                            className="w-full px-4 py-2.5 text-left text-sm text-primary-600 hover:bg-primary-50 transition-colors cursor-pointer flex items-center gap-2"
+                          >
+                            <UserPlus size={16} />
+                            <span className="font-medium">Crear nuevo cliente</span>
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
