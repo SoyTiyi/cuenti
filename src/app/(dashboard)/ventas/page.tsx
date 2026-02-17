@@ -6,6 +6,12 @@ import { Eye, Check, MessageCircle } from "lucide-react";
 const ventasDelMes = 24;
 const ventasPendientes = 8;
 
+const resumenVentas = {
+  totalVentas: 42500.0,
+  recaudado: 28150.0,
+  porCobrar: 14350.0,
+};
+
 const ventasUltimos7Dias = [
   { dia: "Lun", ventas: 5 },
   { dia: "Mar", ventas: 8 },
@@ -113,6 +119,33 @@ export default function VentasPage() {
         <span className="px-4 py-2 bg-warning-100 text-warning-700 rounded-full text-sm font-medium">
           Pendientes {ventasPendientes}
         </span>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white rounded-xl shadow-sm p-5">
+          <p className="text-xs text-neutral-500 uppercase tracking-wide font-medium">
+            Total Ventas
+          </p>
+          <p className="text-3xl font-bold text-neutral-900 mt-1">
+            ${resumenVentas.totalVentas.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+          </p>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm p-5">
+          <p className="text-xs text-success-600 uppercase tracking-wide font-medium">
+            Recaudado
+          </p>
+          <p className="text-3xl font-bold text-neutral-900 mt-1">
+            ${resumenVentas.recaudado.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+          </p>
+        </div>
+        <div className="bg-white rounded-xl shadow-sm p-5">
+          <p className="text-xs text-warning-600 uppercase tracking-wide font-medium">
+            Por Cobrar
+          </p>
+          <p className="text-3xl font-bold text-neutral-900 mt-1">
+            ${resumenVentas.porCobrar.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+          </p>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
