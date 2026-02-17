@@ -4,84 +4,84 @@ import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 import { Eye, Check, MessageCircle, X, User, Package, DollarSign, Calendar, FileText, ChevronDown, UserPlus, Phone, Mail, ArrowLeft } from "lucide-react";
 
-const ventasDelMes = 24;
-const ventasPendientes = 8;
+const monthSalesCount = 24;
+const pendingSalesCount = 8;
 
-const resumenVentas = {
-  totalVentas: 42500.0,
-  recaudado: 28150.0,
-  porCobrar: 14350.0,
+const salesSummary = {
+  total: 42500.0,
+  collected: 28150.0,
+  pending: 14350.0,
 };
 
-const ventasUltimos7Dias = [
-  { dia: "Lun", ventas: 5 },
-  { dia: "Mar", ventas: 8 },
-  { dia: "Mié", ventas: 3 },
-  { dia: "Jue", ventas: 12 },
-  { dia: "Vie", ventas: 7 },
-  { dia: "Sáb", ventas: 4 },
-  { dia: "Dom", ventas: 2 },
+const last7DaysSales = [
+  { day: "Lun", sales: 5 },
+  { day: "Mar", sales: 8 },
+  { day: "Mié", sales: 3 },
+  { day: "Jue", sales: 12 },
+  { day: "Vie", sales: 7 },
+  { day: "Sáb", sales: 4 },
+  { day: "Dom", sales: 2 },
 ];
 
-const serviciosMasVendidos = [
-  { nombre: "Diseño Web", cantidad: 12, color: "#6366F1" },
-  { nombre: "Hosting", cantidad: 8, color: "#8B5CF6" },
-  { nombre: "Mantenimiento", cantidad: 6, color: "#10B981" },
-  { nombre: "Consultoría", cantidad: 4, color: "#F59E0B" },
+const topServices = [
+  { name: "Diseño Web", quantity: 12, color: "#6366F1" },
+  { name: "Hosting", quantity: 8, color: "#8B5CF6" },
+  { name: "Mantenimiento", quantity: 6, color: "#10B981" },
+  { name: "Consultoría", quantity: 4, color: "#F59E0B" },
 ];
 
-const ventas = [
+const salesMock = [
   {
     id: 1,
-    cliente: "Maria Gonzalez",
+    client: "Maria Gonzalez",
     avatar: "/avatars/maria.jpg",
-    tiempo: "Hace 2 horas",
-    servicio: "Diseño Web Corporativo",
-    icono: "palette",
-    monto: 1250.0,
-    estado: "pendiente",
+    time: "Hace 2 horas",
+    service: "Diseño Web Corporativo",
+    icon: "palette",
+    amount: 1250.0,
+    status: "pending",
   },
   {
     id: 2,
-    cliente: "Carlos Ruiz",
+    client: "Carlos Ruiz",
     avatar: "/avatars/carlos.jpg",
-    tiempo: "Ayer",
-    servicio: "Lote de Repuestos #442",
-    icono: "box",
-    monto: 450.0,
-    estado: "pagada",
+    time: "Ayer",
+    service: "Lote de Repuestos #442",
+    icon: "box",
+    amount: 450.0,
+    status: "paid",
   },
   {
     id: 3,
-    cliente: "Luis Hernandez",
+    client: "Luis Hernandez",
     avatar: "/avatars/luis.jpg",
-    tiempo: "31 Oct, 2023",
-    servicio: "Reparación Local A",
-    icono: "wrench",
-    monto: 320.0,
-    estado: "pagada",
+    time: "31 Oct, 2023",
+    service: "Reparación Local A",
+    icon: "wrench",
+    amount: 320.0,
+    status: "paid",
   },
   {
     id: 4,
-    cliente: "Sofia Martí",
+    client: "Sofia Martí",
     avatar: "/avatars/sofia.jpg",
-    tiempo: "28 Oct, 2023",
-    servicio: "Envío Internacional",
-    icono: "truck",
-    monto: 1100.0,
-    estado: "pendiente",
+    time: "28 Oct, 2023",
+    service: "Envío Internacional",
+    icon: "truck",
+    amount: 1100.0,
+    status: "pending",
   },
 ];
 
-const clientesMock = [
-  { id: 1, name: "Maria Gonzalez", email: "maria@email.com" },
-  { id: 2, name: "Carlos Ruiz", email: "carlos@email.com" },
-  { id: 3, name: "Luis Hernandez", email: "luis@email.com" },
-  { id: 4, name: "Sofia Martí", email: "sofia@email.com" },
-  { id: 5, name: "Ana Lopez", email: "ana@email.com" },
+const clientsMock = [
+  { id: 1, name: "Maria Gonzalez", email: "maria@email.com", phone: "" },
+  { id: 2, name: "Carlos Ruiz", email: "carlos@email.com", phone: "" },
+  { id: 3, name: "Luis Hernandez", email: "luis@email.com", phone: "" },
+  { id: 4, name: "Sofia Martí", email: "sofia@email.com", phone: "" },
+  { id: 5, name: "Ana Lopez", email: "ana@email.com", phone: "" },
 ];
 
-const serviciosMock = [
+const servicesMock = [
   { id: 1, name: "Diseño Web Corporativo", price: 1250.0 },
   { id: 2, name: "Hosting Anual VPS", price: 150.0 },
   { id: 3, name: "Mantenimiento Mensual", price: 320.0 },
@@ -89,8 +89,8 @@ const serviciosMock = [
   { id: 5, name: "Desarrollo App Móvil", price: 3500.0 },
 ];
 
-function getEstadoBadge(estado: string) {
-  if (estado === "pagada") {
+function StatusBadge({ status }: { status: string }) {
+  if (status === "paid") {
     return (
       <span className="px-3 py-1 text-xs font-medium rounded-full bg-success-100 text-success-700">
         Pagada
@@ -104,8 +104,8 @@ function getEstadoBadge(estado: string) {
   );
 }
 
-function getAccionBoton(estado: string) {
-  if (estado === "pagada") {
+function ActionButton({ status }: { status: string }) {
+  if (status === "paid") {
     return (
       <button className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-success-600 hover:bg-success-50 rounded-lg transition-colors cursor-pointer">
         <MessageCircle size={16} />
@@ -121,61 +121,61 @@ function getAccionBoton(estado: string) {
   );
 }
 
-interface NuevaVentaModalProps {
+interface NewSaleModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
-  const [clienteId, setClienteId] = useState<number | null>(null);
-  const [servicioId, setServicioId] = useState<number | null>(null);
-  const [monto, setMonto] = useState("");
-  const [fechaVenta, setFechaVenta] = useState(new Date().toISOString().split("T")[0]);
-  const [fechaVencimiento, setFechaVencimiento] = useState("");
-  const [notas, setNotas] = useState("");
-  const [showClienteDropdown, setShowClienteDropdown] = useState(false);
-  const [showServicioDropdown, setShowServicioDropdown] = useState(false);
-  const [clientes, setClientes] = useState(clientesMock);
-  const [creandoCliente, setCreandoCliente] = useState(false);
-  const [nuevoCliente, setNuevoCliente] = useState({ name: "", phone: "", email: "" });
+function NewSaleModal({ isOpen, onClose }: NewSaleModalProps) {
+  const [clientId, setClientId] = useState<number | null>(null);
+  const [serviceId, setServiceId] = useState<number | null>(null);
+  const [amount, setAmount] = useState("");
+  const [saleDate, setSaleDate] = useState(new Date().toISOString().split("T")[0]);
+  const [dueDate, setDueDate] = useState("");
+  const [notes, setNotes] = useState("");
+  const [showClientDropdown, setShowClientDropdown] = useState(false);
+  const [showServiceDropdown, setShowServiceDropdown] = useState(false);
+  const [clients, setClients] = useState(clientsMock);
+  const [isCreatingClient, setIsCreatingClient] = useState(false);
+  const [newClient, setNewClient] = useState({ name: "", phone: "", email: "" });
 
-  const clienteSeleccionado = clientes.find((c) => c.id === clienteId);
-  const servicioSeleccionado = serviciosMock.find((s) => s.id === servicioId);
+  const selectedClient = clients.find((c) => c.id === clientId);
+  const selectedService = servicesMock.find((s) => s.id === serviceId);
 
-  const handleServicioSelect = (id: number) => {
-    setServicioId(id);
-    const servicio = serviciosMock.find((s) => s.id === id);
-    if (servicio) {
-      setMonto(servicio.price.toString());
+  const handleServiceSelect = (id: number) => {
+    setServiceId(id);
+    const service = servicesMock.find((s) => s.id === id);
+    if (service) {
+      setAmount(service.price.toString());
     }
-    setShowServicioDropdown(false);
+    setShowServiceDropdown(false);
   };
 
-  const handleCrearCliente = () => {
-    if (!nuevoCliente.name.trim()) return;
-    const newId = Math.max(...clientes.map((c) => c.id)) + 1;
-    const cliente = { id: newId, name: nuevoCliente.name, email: nuevoCliente.email, phone: nuevoCliente.phone };
-    setClientes([...clientes, cliente]);
-    setClienteId(newId);
-    setNuevoCliente({ name: "", phone: "", email: "" });
-    setCreandoCliente(false);
-    setShowClienteDropdown(false);
+  const handleCreateClient = () => {
+    if (!newClient.name.trim()) return;
+    const newId = Math.max(...clients.map((c) => c.id)) + 1;
+    const client = { id: newId, name: newClient.name, email: newClient.email, phone: newClient.phone };
+    setClients([...clients, client]);
+    setClientId(newId);
+    setNewClient({ name: "", phone: "", email: "" });
+    setIsCreatingClient(false);
+    setShowClientDropdown(false);
   };
 
   const handleSubmit = () => {
     console.log({
-      clienteId,
-      servicioId,
-      monto: parseFloat(monto),
-      fechaVenta,
-      fechaVencimiento: fechaVencimiento || null,
-      notas: notas || null,
+      clientId,
+      serviceId,
+      amount: parseFloat(amount),
+      saleDate,
+      dueDate: dueDate || null,
+      notes: notes || null,
     });
     onClose();
   };
 
-  const isFormValid = clienteId && servicioId && monto && parseFloat(monto) > 0 && fechaVenta;
-  const isNuevoClienteValid = nuevoCliente.name.trim().length > 0;
+  const isFormValid = clientId && serviceId && amount && parseFloat(amount) > 0 && saleDate;
+  const isNewClientValid = newClient.name.trim().length > 0;
 
   if (!isOpen) return null;
 
@@ -213,23 +213,23 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
                 <button
                   type="button"
                   onClick={() => {
-                    setShowClienteDropdown(!showClienteDropdown);
-                    setShowServicioDropdown(false);
+                    setShowClientDropdown(!showClientDropdown);
+                    setShowServiceDropdown(false);
                   }}
                   className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-left text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition cursor-pointer"
                 >
-                  {clienteSeleccionado ? clienteSeleccionado.name : "Selecciona un cliente"}
+                  {selectedClient ? selectedClient.name : "Selecciona un cliente"}
                 </button>
-                <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 transition-transform ${showClienteDropdown ? "rotate-180" : ""}`} />
+                <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 transition-transform ${showClientDropdown ? "rotate-180" : ""}`} />
 
-                {showClienteDropdown && (
+                {showClientDropdown && (
                   <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-200 rounded-xl shadow-lg overflow-hidden">
-                    {creandoCliente ? (
+                    {isCreatingClient ? (
                       <div className="p-3">
                         <div className="flex items-center gap-2 mb-3">
                           <button
                             type="button"
-                            onClick={() => setCreandoCliente(false)}
+                            onClick={() => setIsCreatingClient(false)}
                             className="p-1 text-neutral-400 hover:text-neutral-600 rounded transition-colors cursor-pointer"
                           >
                             <ArrowLeft size={16} />
@@ -242,8 +242,8 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
                             <input
                               type="text"
                               placeholder="Nombre *"
-                              value={nuevoCliente.name}
-                              onChange={(e) => setNuevoCliente({ ...nuevoCliente, name: e.target.value })}
+                              value={newClient.name}
+                              onChange={(e) => setNewClient({ ...newClient, name: e.target.value })}
                               className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300"
                             />
                           </div>
@@ -252,8 +252,8 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
                             <input
                               type="tel"
                               placeholder="Teléfono"
-                              value={nuevoCliente.phone}
-                              onChange={(e) => setNuevoCliente({ ...nuevoCliente, phone: e.target.value })}
+                              value={newClient.phone}
+                              onChange={(e) => setNewClient({ ...newClient, phone: e.target.value })}
                               className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300"
                             />
                           </div>
@@ -262,17 +262,17 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
                             <input
                               type="email"
                               placeholder="Correo"
-                              value={nuevoCliente.email}
-                              onChange={(e) => setNuevoCliente({ ...nuevoCliente, email: e.target.value })}
+                              value={newClient.email}
+                              onChange={(e) => setNewClient({ ...newClient, email: e.target.value })}
                               className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300"
                             />
                           </div>
                           <button
                             type="button"
-                            onClick={handleCrearCliente}
-                            disabled={!isNuevoClienteValid}
+                            onClick={handleCreateClient}
+                            disabled={!isNewClientValid}
                             className={`w-full py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
-                              isNuevoClienteValid
+                              isNewClientValid
                                 ? "bg-primary-500 text-white hover:bg-primary-600"
                                 : "bg-neutral-100 text-neutral-400 cursor-not-allowed"
                             }`}
@@ -284,27 +284,27 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
                     ) : (
                       <>
                         <div className="max-h-36 overflow-y-auto">
-                          {clientes.map((cliente) => (
+                          {clients.map((client) => (
                             <button
-                              key={cliente.id}
+                              key={client.id}
                               type="button"
                               onClick={() => {
-                                setClienteId(cliente.id);
-                                setShowClienteDropdown(false);
+                                setClientId(client.id);
+                                setShowClientDropdown(false);
                               }}
                               className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer ${
-                                clienteId === cliente.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"
+                                clientId === client.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"
                               }`}
                             >
-                              <span className="font-medium">{cliente.name}</span>
-                              {cliente.email && <span className="text-neutral-400 ml-2">{cliente.email}</span>}
+                              <span className="font-medium">{client.name}</span>
+                              {client.email && <span className="text-neutral-400 ml-2">{client.email}</span>}
                             </button>
                           ))}
                         </div>
                         <div className="border-t border-neutral-100">
                           <button
                             type="button"
-                            onClick={() => setCreandoCliente(true)}
+                            onClick={() => setIsCreatingClient(true)}
                             className="w-full px-4 py-2.5 text-left text-sm text-primary-600 hover:bg-primary-50 transition-colors cursor-pointer flex items-center gap-2"
                           >
                             <UserPlus size={16} />
@@ -327,28 +327,28 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
                 <button
                   type="button"
                   onClick={() => {
-                    setShowServicioDropdown(!showServicioDropdown);
-                    setShowClienteDropdown(false);
+                    setShowServiceDropdown(!showServiceDropdown);
+                    setShowClientDropdown(false);
                   }}
                   className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-left text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition cursor-pointer"
                 >
-                  {servicioSeleccionado ? servicioSeleccionado.name : "Selecciona un servicio"}
+                  {selectedService ? selectedService.name : "Selecciona un servicio"}
                 </button>
-                <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 transition-transform ${showServicioDropdown ? "rotate-180" : ""}`} />
+                <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 transition-transform ${showServiceDropdown ? "rotate-180" : ""}`} />
 
-                {showServicioDropdown && (
+                {showServiceDropdown && (
                   <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
-                    {serviciosMock.map((servicio) => (
+                    {servicesMock.map((service) => (
                       <button
-                        key={servicio.id}
+                        key={service.id}
                         type="button"
-                        onClick={() => handleServicioSelect(servicio.id)}
+                        onClick={() => handleServiceSelect(service.id)}
                         className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer flex justify-between items-center ${
-                          servicioId === servicio.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"
+                          serviceId === service.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"
                         }`}
                       >
-                        <span className="font-medium">{servicio.name}</span>
-                        <span className="text-neutral-500">${servicio.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+                        <span className="font-medium">{service.name}</span>
+                        <span className="text-neutral-500">${service.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                       </button>
                     ))}
                   </div>
@@ -367,8 +367,8 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
                   step="0.01"
                   min="0"
                   placeholder="0.00"
-                  value={monto}
-                  onChange={(e) => setMonto(e.target.value)}
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition"
                 />
               </div>
@@ -383,8 +383,8 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
                   <input
                     type="date"
-                    value={fechaVenta}
-                    onChange={(e) => setFechaVenta(e.target.value)}
+                    value={saleDate}
+                    onChange={(e) => setSaleDate(e.target.value)}
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition"
                   />
                 </div>
@@ -398,8 +398,8 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
                   <input
                     type="date"
-                    value={fechaVencimiento}
-                    onChange={(e) => setFechaVencimiento(e.target.value)}
+                    value={dueDate}
+                    onChange={(e) => setDueDate(e.target.value)}
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition"
                   />
                 </div>
@@ -414,8 +414,8 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
                 <FileText className="absolute left-3 top-3 w-4 h-4 text-neutral-400" />
                 <textarea
                   placeholder="Detalles adicionales de la venta..."
-                  value={notas}
-                  onChange={(e) => setNotas(e.target.value)}
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
                   rows={3}
                   className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition resize-none"
                 />
@@ -450,7 +450,7 @@ function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
   );
 }
 
-export default function VentasPage() {
+export default function SalesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
@@ -465,10 +465,10 @@ export default function VentasPage() {
           + Nueva Venta
         </button>
         <span className="px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
-          Ventas del mes {ventasDelMes}
+          Ventas del mes {monthSalesCount}
         </span>
         <span className="px-4 py-2 bg-warning-100 text-warning-700 rounded-full text-sm font-medium">
-          Pendientes {ventasPendientes}
+          Pendientes {pendingSalesCount}
         </span>
       </div>
 
@@ -478,7 +478,7 @@ export default function VentasPage() {
             Total Ventas
           </p>
           <p className="text-3xl font-bold text-neutral-900 mt-1">
-            ${resumenVentas.totalVentas.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+            ${salesSummary.total.toLocaleString("en-US", { minimumFractionDigits: 2 })}
           </p>
         </div>
         <div className="bg-white rounded-xl shadow-sm p-5">
@@ -486,7 +486,7 @@ export default function VentasPage() {
             Recaudado
           </p>
           <p className="text-3xl font-bold text-neutral-900 mt-1">
-            ${resumenVentas.recaudado.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+            ${salesSummary.collected.toLocaleString("en-US", { minimumFractionDigits: 2 })}
           </p>
         </div>
         <div className="bg-white rounded-xl shadow-sm p-5">
@@ -494,7 +494,7 @@ export default function VentasPage() {
             Por Cobrar
           </p>
           <p className="text-3xl font-bold text-neutral-900 mt-1">
-            ${resumenVentas.porCobrar.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+            ${salesSummary.pending.toLocaleString("en-US", { minimumFractionDigits: 2 })}
           </p>
         </div>
       </div>
@@ -506,9 +506,9 @@ export default function VentasPage() {
           </h2>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={ventasUltimos7Dias}>
+              <BarChart data={last7DaysSales}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-                <XAxis dataKey="dia" stroke="#6B7280" fontSize={12} />
+                <XAxis dataKey="day" stroke="#6B7280" fontSize={12} />
                 <YAxis stroke="#6B7280" fontSize={12} />
                 <Tooltip
                   contentStyle={{
@@ -517,7 +517,7 @@ export default function VentasPage() {
                     borderRadius: "8px",
                   }}
                 />
-                <Bar dataKey="ventas" fill="#6366F1" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="sales" fill="#6366F1" radius={[4, 4, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -531,16 +531,16 @@ export default function VentasPage() {
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={serviciosMasVendidos}
+                  data={topServices}
                   cx="50%"
                   cy="50%"
                   innerRadius={50}
                   outerRadius={80}
                   paddingAngle={2}
-                  dataKey="cantidad"
-                  nameKey="nombre"
+                  dataKey="quantity"
+                  nameKey="name"
                 >
-                  {serviciosMasVendidos.map((entry, index) => (
+                  {topServices.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} />
                   ))}
                 </Pie>
@@ -563,26 +563,26 @@ export default function VentasPage() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        {ventas.map((venta) => (
+        {salesMock.map((sale) => (
           <div
-            key={venta.id}
+            key={sale.id}
             className="bg-white rounded-xl shadow-sm p-5 flex flex-col gap-4"
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-neutral-200 flex items-center justify-center text-neutral-600 font-medium">
-                  {venta.cliente.charAt(0)}
+                  {sale.client.charAt(0)}
                 </div>
                 <div>
-                  <p className="font-medium text-neutral-900">{venta.cliente}</p>
-                  <p className="text-xs text-neutral-500">{venta.tiempo}</p>
+                  <p className="font-medium text-neutral-900">{sale.client}</p>
+                  <p className="text-xs text-neutral-500">{sale.time}</p>
                 </div>
               </div>
-              {getEstadoBadge(venta.estado)}
+              <StatusBadge status={sale.status} />
             </div>
 
             <div className="flex items-center gap-2 text-neutral-600">
-              <span className="text-sm">{venta.servicio}</span>
+              <span className="text-sm">{sale.service}</span>
             </div>
 
             <div>
@@ -590,7 +590,7 @@ export default function VentasPage() {
                 Monto Total
               </p>
               <p className="text-2xl font-bold text-neutral-900">
-                ${venta.monto.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                ${sale.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
               </p>
             </div>
 
@@ -601,7 +601,7 @@ export default function VentasPage() {
                 </button>
                 <button
                   className={`p-2 rounded-lg transition-colors cursor-pointer ${
-                    venta.estado === "pagada"
+                    sale.status === "paid"
                       ? "text-success-500 hover:bg-success-50"
                       : "text-neutral-400 hover:bg-neutral-100"
                   }`}
@@ -609,7 +609,7 @@ export default function VentasPage() {
                   <Check size={18} />
                 </button>
               </div>
-              {getAccionBoton(venta.estado)}
+              <ActionButton status={sale.status} />
             </div>
           </div>
         ))}
@@ -620,7 +620,7 @@ export default function VentasPage() {
         <span className="text-xs">▼</span>
       </button>
 
-      <NuevaVentaModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <NewSaleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }
