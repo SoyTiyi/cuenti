@@ -1,7 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
-import { Eye, Check, MessageCircle } from "lucide-react";
+import { Eye, Check, MessageCircle, X, User, Package, DollarSign, Calendar, FileText, ChevronDown } from "lucide-react";
 
 const ventasDelMes = 24;
 const ventasPendientes = 8;
@@ -72,6 +73,22 @@ const ventas = [
   },
 ];
 
+const clientesMock = [
+  { id: 1, name: "Maria Gonzalez", email: "maria@email.com" },
+  { id: 2, name: "Carlos Ruiz", email: "carlos@email.com" },
+  { id: 3, name: "Luis Hernandez", email: "luis@email.com" },
+  { id: 4, name: "Sofia Martí", email: "sofia@email.com" },
+  { id: 5, name: "Ana Lopez", email: "ana@email.com" },
+];
+
+const serviciosMock = [
+  { id: 1, name: "Diseño Web Corporativo", price: 1250.0 },
+  { id: 2, name: "Hosting Anual VPS", price: 150.0 },
+  { id: 3, name: "Mantenimiento Mensual", price: 320.0 },
+  { id: 4, name: "Consultoría IT", price: 450.0 },
+  { id: 5, name: "Desarrollo App Móvil", price: 3500.0 },
+];
+
 function getEstadoBadge(estado: string) {
   if (estado === "pagada") {
     return (
@@ -104,13 +121,259 @@ function getAccionBoton(estado: string) {
   );
 }
 
+interface NuevaVentaModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+function NuevaVentaModal({ isOpen, onClose }: NuevaVentaModalProps) {
+  const [clienteId, setClienteId] = useState<number | null>(null);
+  const [servicioId, setServicioId] = useState<number | null>(null);
+  const [monto, setMonto] = useState("");
+  const [fechaVenta, setFechaVenta] = useState(new Date().toISOString().split("T")[0]);
+  const [fechaVencimiento, setFechaVencimiento] = useState("");
+  const [notas, setNotas] = useState("");
+  const [showClienteDropdown, setShowClienteDropdown] = useState(false);
+  const [showServicioDropdown, setShowServicioDropdown] = useState(false);
+
+  const clienteSeleccionado = clientesMock.find((c) => c.id === clienteId);
+  const servicioSeleccionado = serviciosMock.find((s) => s.id === servicioId);
+
+  const handleServicioSelect = (id: number) => {
+    setServicioId(id);
+    const servicio = serviciosMock.find((s) => s.id === id);
+    if (servicio) {
+      setMonto(servicio.price.toString());
+    }
+    setShowServicioDropdown(false);
+  };
+
+  const handleSubmit = () => {
+    console.log({
+      clienteId,
+      servicioId,
+      monto: parseFloat(monto),
+      fechaVenta,
+      fechaVencimiento: fechaVencimiento || null,
+      notas: notas || null,
+    });
+    onClose();
+  };
+
+  const isFormValid = clienteId && servicioId && monto && parseFloat(monto) > 0 && fechaVenta;
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center">
+      <div
+        className="absolute inset-0 bg-neutral-900/60 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      <div className="relative bg-white w-full max-w-lg mx-4 rounded-2xl shadow-2xl overflow-hidden">
+        <div className="px-6 py-5 border-b border-neutral-100">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-semibold text-neutral-900">Registrar venta</h2>
+              <p className="text-sm text-neutral-500 mt-0.5">Completa los datos de la transacción</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+
+        <div className="px-6 py-5 max-h-[calc(100vh-220px)] overflow-y-auto">
+          <div className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                Cliente <span className="text-danger-500">*</span>
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowClienteDropdown(!showClienteDropdown);
+                    setShowServicioDropdown(false);
+                  }}
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-left text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition cursor-pointer"
+                >
+                  {clienteSeleccionado ? clienteSeleccionado.name : "Selecciona un cliente"}
+                </button>
+                <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 transition-transform ${showClienteDropdown ? "rotate-180" : ""}`} />
+
+                {showClienteDropdown && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
+                    {clientesMock.map((cliente) => (
+                      <button
+                        key={cliente.id}
+                        type="button"
+                        onClick={() => {
+                          setClienteId(cliente.id);
+                          setShowClienteDropdown(false);
+                        }}
+                        className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer ${
+                          clienteId === cliente.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"
+                        }`}
+                      >
+                        <span className="font-medium">{cliente.name}</span>
+                        <span className="text-neutral-400 ml-2">{cliente.email}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                Servicio <span className="text-danger-500">*</span>
+              </label>
+              <div className="relative">
+                <Package className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowServicioDropdown(!showServicioDropdown);
+                    setShowClienteDropdown(false);
+                  }}
+                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-left text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition cursor-pointer"
+                >
+                  {servicioSeleccionado ? servicioSeleccionado.name : "Selecciona un servicio"}
+                </button>
+                <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 transition-transform ${showServicioDropdown ? "rotate-180" : ""}`} />
+
+                {showServicioDropdown && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
+                    {serviciosMock.map((servicio) => (
+                      <button
+                        key={servicio.id}
+                        type="button"
+                        onClick={() => handleServicioSelect(servicio.id)}
+                        className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer flex justify-between items-center ${
+                          servicioId === servicio.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"
+                        }`}
+                      >
+                        <span className="font-medium">{servicio.name}</span>
+                        <span className="text-neutral-500">${servicio.price.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                Monto <span className="text-danger-500">*</span>
+              </label>
+              <div className="relative">
+                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  placeholder="0.00"
+                  value={monto}
+                  onChange={(e) => setMonto(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                  Fecha de venta <span className="text-danger-500">*</span>
+                </label>
+                <div className="relative">
+                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                  <input
+                    type="date"
+                    value={fechaVenta}
+                    onChange={(e) => setFechaVenta(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                  Fecha límite de pago
+                </label>
+                <div className="relative">
+                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
+                  <input
+                    type="date"
+                    value={fechaVencimiento}
+                    onChange={(e) => setFechaVencimiento(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                Notas
+              </label>
+              <div className="relative">
+                <FileText className="absolute left-3 top-3 w-4 h-4 text-neutral-400" />
+                <textarea
+                  placeholder="Detalles adicionales de la venta..."
+                  value={notas}
+                  onChange={(e) => setNotas(e.target.value)}
+                  rows={3}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition resize-none"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="px-6 py-4 bg-neutral-50 border-t border-neutral-100 flex gap-3 justify-end">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2.5 text-sm font-medium text-neutral-700 hover:bg-neutral-200 rounded-lg transition-colors cursor-pointer"
+          >
+            Cancelar
+          </button>
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={!isFormValid}
+            className={`px-5 py-2.5 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
+              isFormValid
+                ? "bg-primary-500 text-white hover:bg-primary-600"
+                : "bg-neutral-200 text-neutral-400 cursor-not-allowed"
+            }`}
+          >
+            Guardar venta
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function VentasPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="flex flex-col gap-6">
       <h1 className="text-2xl font-bold text-neutral-900">Ventas</h1>
 
       <div className="flex flex-wrap items-center gap-3">
-        <button className="px-5 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 cursor-pointer font-medium transition-colors">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="px-5 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 cursor-pointer font-medium transition-colors"
+        >
           + Nueva Venta
         </button>
         <span className="px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
@@ -268,6 +531,8 @@ export default function VentasPage() {
         Ver más ventas
         <span className="text-xs">▼</span>
       </button>
+
+      <NuevaVentaModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
     </div>
   );
 }
