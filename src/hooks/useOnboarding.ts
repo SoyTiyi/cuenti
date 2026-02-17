@@ -7,7 +7,6 @@ import {
     MAX_FILE_SIZE,
     ACCEPTED_IMAGE_TYPES
 } from "@/lib/constants";
-import { s3Service } from "@/service/aws/S3Service";
 
 const onboardingSchema = z.object({
   businessName: z
@@ -187,11 +186,25 @@ export function useOnboarding() {
       }
 
       if (logo) {
-        const logoUrl = await s3Service.uploadFile(logo, `logos/${Date.now()}_${logo.name}`, process.env.PROFILE_BUCKET!);
-        data.logoUrl = logoUrl;
+        const formData = new FormData();
+        formData.append("file", logo);
+        formData.append("key", `logos/${Date.now()}_${logo.name}`);
+        formData.append("bucketName", "profile-pictures");
+
+        const uploadResponse = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (!uploadResponse.ok) {
+          throw new Error("Error al subir el logo");
+        }
+
+        const { location } = await uploadResponse.json();
+        data.logoUrl = location;
       }
 
-      const response = await fetch("/api/onboarding", {
+      const response = await fetch("/api/onboarding/complete", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

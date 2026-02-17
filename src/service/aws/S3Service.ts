@@ -32,6 +32,7 @@ class S3Service {
       Key: key,
       Body: file,
       ContentType: file.type,
+      ACL: "public-read" as const,
     };
 
     try {

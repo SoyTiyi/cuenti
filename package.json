@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "setup:minio": "tsx scripts/setup-minio-bucket.ts"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^4.15.0",

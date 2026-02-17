@@ -23,6 +23,12 @@ class OnboardingService {
                     },
                 },
             });
+
+            await prisma.user.update({
+                where: { email },
+                data: { needsOnboarding: false },
+            });
+
             return { message: "Onboarding completed successfully" };
         } catch (error) {
             console.error("Error completing onboarding:", error);
