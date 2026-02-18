@@ -18,6 +18,9 @@ export function useSales() {
     phone: "",
     email: "",
   });
+  const [services, setServices] = useState([]);
+
+
   useEffect(() => {
     async function fetchClients() {
       try {
@@ -36,6 +39,25 @@ export function useSales() {
       }
     }
 
+    async function fetchServices() {
+      try {
+        const response = await fetch("/api/service/company");
+
+        if (!response.ok) {
+          throw new Error("Error al cargar los servicios");
+        }
+
+        const data = await response.json();
+        setServices(data);
+      } catch (error) {
+        console.error(
+          error instanceof Error ? error.message : "Error desconocido",
+        );
+      }
+    }
+
     fetchClients();
+
+    fetchServices();
   }, []);
 }
