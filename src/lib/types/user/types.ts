@@ -12,3 +12,11 @@ export interface UserOnboardingDTO {
     lastname: string;
     profileImage: string;
 }
+
+export interface User {
+    id: number,
+    name: string,
+    lastname: string,
+    email: string,
+    profileImage: string,
+}
