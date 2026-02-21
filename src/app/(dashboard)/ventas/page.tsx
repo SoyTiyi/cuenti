@@ -3,7 +3,11 @@
 import { useState } from "react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from "recharts";
 import { Eye, Check, MessageCircle, X, User, Package, DollarSign, Calendar, FileText, ChevronDown, UserPlus, Phone, Mail, ArrowLeft } from "lucide-react";
+import { useSales } from "@/hooks/useSales";
+import { Client } from "@/lib/types/client/types";
+import { Service } from "@/lib/types/service/types";
 
+// TODO: Reemplazar con datos reales cuando exista el endpoint de ventas
 const monthSalesCount = 24;
 const pendingSalesCount = 8;
 
@@ -73,21 +77,6 @@ const salesMock = [
   },
 ];
 
-const clientsMock = [
-  { id: 1, name: "Maria Gonzalez", email: "maria@email.com", phone: "" },
-  { id: 2, name: "Carlos Ruiz", email: "carlos@email.com", phone: "" },
-  { id: 3, name: "Luis Hernandez", email: "luis@email.com", phone: "" },
-  { id: 4, name: "Sofia Martí", email: "sofia@email.com", phone: "" },
-  { id: 5, name: "Ana Lopez", email: "ana@email.com", phone: "" },
-];
-
-const servicesMock = [
-  { id: 1, name: "Diseño Web Corporativo", price: 1250.0 },
-  { id: 2, name: "Hosting Anual VPS", price: 150.0 },
-  { id: 3, name: "Mantenimiento Mensual", price: 320.0 },
-  { id: 4, name: "Consultoría IT", price: 450.0 },
-  { id: 5, name: "Desarrollo App Móvil", price: 3500.0 },
-];
 
 function StatusBadge({ status }: { status: string }) {
   if (status === "paid") {
@@ -124,9 +113,11 @@ function ActionButton({ status }: { status: string }) {
 interface NewSaleModalProps {
   isOpen: boolean;
   onClose: () => void;
+  clients: Client[];
+  services: Service[];
 }
 
-function NewSaleModal({ isOpen, onClose }: NewSaleModalProps) {
+function NewSaleModal({ isOpen, onClose, clients, services }: NewSaleModalProps) {
   const [clientId, setClientId] = useState<number | null>(null);
   const [serviceId, setServiceId] = useState<number | null>(null);
   const [amount, setAmount] = useState("");
@@ -135,16 +126,15 @@ function NewSaleModal({ isOpen, onClose }: NewSaleModalProps) {
   const [notes, setNotes] = useState("");
   const [showClientDropdown, setShowClientDropdown] = useState(false);
   const [showServiceDropdown, setShowServiceDropdown] = useState(false);
-  const [clients, setClients] = useState(clientsMock);
   const [isCreatingClient, setIsCreatingClient] = useState(false);
   const [newClient, setNewClient] = useState({ name: "", phone: "", email: "" });
 
   const selectedClient = clients.find((c) => c.id === clientId);
-  const selectedService = servicesMock.find((s) => s.id === serviceId);
+  const selectedService = services.find((s) => s.id === serviceId);
 
   const handleServiceSelect = (id: number) => {
     setServiceId(id);
-    const service = servicesMock.find((s) => s.id === id);
+    const service = services.find((s) => s.id === id);
     if (service) {
       setAmount(service.price.toString());
     }
@@ -153,10 +143,6 @@ function NewSaleModal({ isOpen, onClose }: NewSaleModalProps) {
 
   const handleCreateClient = () => {
     if (!newClient.name.trim()) return;
-    const newId = Math.max(...clients.map((c) => c.id)) + 1;
-    const client = { id: newId, name: newClient.name, email: newClient.email, phone: newClient.phone };
-    setClients([...clients, client]);
-    setClientId(newId);
     setNewClient({ name: "", phone: "", email: "" });
     setIsCreatingClient(false);
     setShowClientDropdown(false);
@@ -338,7 +324,7 @@ function NewSaleModal({ isOpen, onClose }: NewSaleModalProps) {
 
                 {showServiceDropdown && (
                   <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-200 rounded-xl shadow-lg max-h-48 overflow-y-auto">
-                    {servicesMock.map((service) => (
+                    {services.map((service) => (
                       <button
                         key={service.id}
                         type="button"
@@ -452,6 +438,7 @@ function NewSaleModal({ isOpen, onClose }: NewSaleModalProps) {
 
 export default function SalesPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { clients, services, isLoading, error } = useSales();
 
   return (
     <div className="flex flex-col gap-6">
@@ -620,7 +607,7 @@ export default function SalesPage() {
         <span className="text-xs">▼</span>
       </button>
 
-      <NewSaleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <NewSaleModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} clients={clients} services={services} />
     </div>
   );
 }
