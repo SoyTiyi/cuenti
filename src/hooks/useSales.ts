@@ -15,6 +15,13 @@ const DAY_LABELS: Record<number, string> = {
   6: "Sáb",
 };
 
+function toLocalDateStr(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
 function computeStats(sales: Sale[]): SaleStats {
   const now = new Date();
   const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
@@ -37,7 +44,7 @@ function computeLast7Days(sales: Sale[]): SalesChartDay[] {
   for (let i = 6; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(today.getDate() - i);
-    const dateStr = date.toISOString().split("T")[0];
+    const dateStr = toLocalDateStr(date);
 
     const count = sales.filter((s) => s.saleDate.split("T")[0] === dateStr).length;
     days.push({ day: DAY_LABELS[date.getDay()], sales: count });
