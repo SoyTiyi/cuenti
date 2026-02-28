@@ -18,9 +18,13 @@ class SaleService {
   }
 
   async createSale(data: CreateSaleDTO) {
+    const isPaid = data.isPaid ?? false;
     return prisma.sale.create({
       data: {
         amount: data.amount,
+        isPaid,
+        paidAmount: isPaid ? data.amount : 0,
+        paymentDate: isPaid ? (data.paymentDate ? new Date(data.paymentDate) : new Date()) : null,
         saleDate: new Date(data.saleDate),
         dueDate: data.dueDate ? new Date(data.dueDate) : null,
         notes: data.notes ?? null,

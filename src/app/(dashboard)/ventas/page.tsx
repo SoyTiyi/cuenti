@@ -6,9 +6,9 @@ import {
   ResponsiveContainer, PieChart, Pie, Cell, Legend,
 } from "recharts";
 import {
-  Eye, Check, MessageCircle, X, User, Package, DollarSign,
-  Calendar, FileText, ChevronDown, UserPlus, Phone, Mail,
-  ArrowLeft, Loader2, Plus,
+  X, DollarSign, Calendar, FileText, ChevronDown,
+  UserPlus, Phone, Mail, ArrowLeft, Loader2, Plus,
+  Check, MessageCircle, Eye, Package,
 } from "lucide-react";
 
 import { useCompany } from "@/hooks/useCompany";
@@ -16,30 +16,114 @@ import { useClients } from "@/hooks/useClients";
 import { useServices } from "@/hooks/useServices";
 import { useSales } from "@/hooks/useSales";
 
-import { Client } from "@/lib/types/client/types";
-import { Service } from "@/lib/types/service/types";
-import { Sale } from "@/lib/types/sale/type";
+import type { Client } from "@/lib/types/client/types";
+import type { Service } from "@/lib/types/service/types";
+import type { Sale } from "@/lib/types/sale/type";
 
-// ─── Status Badge ────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function formatCurrency(value: number) {
+  return `$${value.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
+}
+
+function formatDate(dateStr: string) {
+  return new Date(dateStr).toLocaleDateString("es-ES", {
+    day: "numeric", month: "short", year: "numeric",
+  });
+}
+
+function ClientAvatar({ name }: { name: string }) {
+  return (
+    <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-semibold text-sm flex-shrink-0">
+      {name.charAt(0).toUpperCase()}
+    </div>
+  );
+}
+
+// ─── Status Badge ─────────────────────────────────────────────────────────────
 
 function StatusBadge({ isPaid }: { isPaid: boolean }) {
   return isPaid ? (
-    <span className="px-3 py-1 text-xs font-medium rounded-full bg-success-100 text-success-700">
+    <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-success-100 text-success-700">
       Pagada
     </span>
   ) : (
-    <span className="px-3 py-1 text-xs font-medium rounded-full bg-warning-100 text-warning-700">
+    <span className="px-2.5 py-1 text-xs font-medium rounded-full bg-warning-100 text-warning-700">
       Pendiente
     </span>
   );
 }
 
-// ─── New Client Form (inline inside dropdown) ─────────────────────────────────
+// ─── Toggle Switch ────────────────────────────────────────────────────────────
+
+interface ToggleProps {
+  checked: boolean;
+  onChange: (value: boolean) => void;
+  label: string;
+}
+
+function Toggle({ checked, onChange, label }: ToggleProps) {
+  return (
+    <button
+      type="button"
+      onClick={() => onChange(!checked)}
+      className="flex items-center gap-3 w-full cursor-pointer group"
+    >
+      <div className={`relative w-10 h-6 rounded-full transition-colors duration-200 ${checked ? "bg-success-500" : "bg-neutral-200"}`}>
+        <span className={`absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${checked ? "translate-x-4" : "translate-x-0"}`} />
+      </div>
+      <span className="text-sm font-medium text-neutral-700">{label}</span>
+    </button>
+  );
+}
+
+// ─── Inline Dropdown ──────────────────────────────────────────────────────────
+
+interface DropdownWrapperProps {
+  label: string;
+  required?: boolean;
+  displayValue: string;
+  isOpen: boolean;
+  onToggle: () => void;
+  icon: React.ReactNode;
+  chevronOpen: boolean;
+  children: React.ReactNode;
+}
+
+function DropdownWrapper({ label, required, displayValue, isOpen, onToggle, icon, chevronOpen, children }: DropdownWrapperProps) {
+  return (
+    <div>
+      <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+        {label} {required && <span className="text-danger-500">*</span>}
+      </label>
+      <div className="relative">
+        <span className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none">
+          {icon}
+        </span>
+        <button
+          type="button"
+          onClick={onToggle}
+          className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-left text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 transition cursor-pointer"
+        >
+          {displayValue}
+        </button>
+        <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none transition-transform ${chevronOpen ? "rotate-180" : ""}`} />
+      </div>
+      {isOpen && (
+        <div className="mt-1 bg-white border border-neutral-200 rounded-xl shadow-sm overflow-hidden">
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── New Client Form ──────────────────────────────────────────────────────────
 
 interface NewClientFormProps {
   onBack: () => void;
   onCreated: (client: Client) => void;
-  createClient: (data: { name: string; phone: string; email: string }) => Promise<Client | null>;
+  createClient: (data: { name: string; phone: string; email: string }) => Promise<Client>;
 }
 
 function NewClientForm({ onBack, onCreated, createClient }: NewClientFormProps) {
@@ -55,59 +139,64 @@ function NewClientForm({ onBack, onCreated, createClient }: NewClientFormProps) 
     setError(null);
     try {
       const client = await createClient({ name, phone, email });
-      if (client) onCreated(client);
+      onCreated(client);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "No se pudo crear el cliente. Intenta de nuevo.");
+      setError(err instanceof Error ? err.message : "No se pudo crear el cliente.");
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   return (
-    <div className="p-3">
-      <div className="flex items-center gap-2 mb-3">
+    <div className="p-3 space-y-2.5">
+      <div className="flex items-center gap-2 mb-1">
         <button type="button" onClick={onBack} className="p-1 text-neutral-400 hover:text-neutral-600 rounded transition-colors cursor-pointer">
           <ArrowLeft size={16} />
         </button>
         <span className="text-sm font-medium text-neutral-700">Nuevo cliente</span>
       </div>
 
-      <div className="space-y-2.5">
-        <div className="relative">
-          <User className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400" />
-          <input type="text" placeholder="Nombre *" value={name} onChange={(e) => setName(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300" />
-        </div>
-        <div className="relative">
-          <Phone className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400" />
-          <input type="tel" placeholder="Teléfono" value={phone} onChange={(e) => setPhone(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300" />
-        </div>
-        <div className="relative">
-          <Mail className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400" />
-          <input type="email" placeholder="Correo" value={email} onChange={(e) => setEmail(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300" />
-        </div>
-
-        {error && <p className="text-xs text-danger-500">{error}</p>}
-
-        <button type="button" onClick={handleSubmit} disabled={!name.trim() || isSubmitting}
-          className={`w-full py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2 ${
-            name.trim() && !isSubmitting ? "bg-primary-500 text-white hover:bg-primary-600" : "bg-neutral-100 text-neutral-400 cursor-not-allowed"
-          }`}>
-          {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : null}
-          Agregar cliente
-        </button>
+      <div className="relative">
+        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
+          <UserPlus size={14} className="text-neutral-400" />
+        </span>
+        <input type="text" placeholder="Nombre *" value={name} onChange={(e) => setName(e.target.value)}
+          className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300" />
       </div>
+
+      <div className="relative">
+        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
+          <Phone size={14} className="text-neutral-400" />
+        </span>
+        <input type="tel" placeholder="Teléfono" value={phone} onChange={(e) => setPhone(e.target.value)}
+          className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300" />
+      </div>
+
+      <div className="relative">
+        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
+          <Mail size={14} className="text-neutral-400" />
+        </span>
+        <input type="email" placeholder="Correo" value={email} onChange={(e) => setEmail(e.target.value)}
+          className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300" />
+      </div>
+
+      {error && <p className="text-xs text-danger-500">{error}</p>}
+
+      <button type="button" onClick={handleSubmit} disabled={!name.trim() || isSubmitting}
+        className="w-full py-2 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 bg-primary-500 text-white hover:bg-primary-600 disabled:bg-neutral-100 disabled:text-neutral-400 disabled:cursor-not-allowed cursor-pointer">
+        {isSubmitting && <Loader2 size={14} className="animate-spin" />}
+        Agregar cliente
+      </button>
     </div>
   );
 }
 
-// ─── New Service Form (inline inside dropdown) ────────────────────────────────
+// ─── New Service Form ─────────────────────────────────────────────────────────
 
 interface NewServiceFormProps {
   onBack: () => void;
   onCreated: (service: Service) => void;
-  createService: (data: { name: string; description: string; price: number }) => Promise<Service | null>;
+  createService: (data: { name: string; description: string; price: number }) => Promise<Service>;
 }
 
 function NewServiceForm({ onBack, onCreated, createService }: NewServiceFormProps) {
@@ -117,60 +206,87 @@ function NewServiceForm({ onBack, onCreated, createService }: NewServiceFormProp
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const isValid = name.trim().length > 0 && price.length > 0 && parseFloat(price) > 0;
+
   const handleSubmit = async () => {
-    if (!name.trim() || !price) return;
+    if (!isValid) return;
     setIsSubmitting(true);
     setError(null);
-    const service = await createService({ name, description, price: parseFloat(price) });
-    if (service) {
+    try {
+      const service = await createService({ name, description, price: parseFloat(price) });
       onCreated(service);
-    } else {
-      setError("No se pudo crear el servicio. Intenta de nuevo.");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo crear el servicio.");
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
   return (
-    <div className="p-3">
-      <div className="flex items-center gap-2 mb-3">
+    <div className="p-3 space-y-2.5">
+      <div className="flex items-center gap-2 mb-1">
         <button type="button" onClick={onBack} className="p-1 text-neutral-400 hover:text-neutral-600 rounded transition-colors cursor-pointer">
           <ArrowLeft size={16} />
         </button>
         <span className="text-sm font-medium text-neutral-700">Nuevo servicio</span>
       </div>
 
-      <div className="space-y-2.5">
-        <div className="relative">
-          <Package className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400" />
-          <input type="text" placeholder="Nombre *" value={name} onChange={(e) => setName(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300" />
-        </div>
-        <div className="relative">
-          <FileText className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400" />
-          <input type="text" placeholder="Descripción" value={description} onChange={(e) => setDescription(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300" />
-        </div>
-        <div className="relative">
-          <DollarSign className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400" />
-          <input type="number" placeholder="Precio *" min="0" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300" />
-        </div>
-
-        {error && <p className="text-xs text-danger-500">{error}</p>}
-
-        <button type="button" onClick={handleSubmit} disabled={!name.trim() || !price || isSubmitting}
-          className={`w-full py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer flex items-center justify-center gap-2 ${
-            name.trim() && price && !isSubmitting ? "bg-primary-500 text-white hover:bg-primary-600" : "bg-neutral-100 text-neutral-400 cursor-not-allowed"
-          }`}>
-          {isSubmitting ? <Loader2 size={14} className="animate-spin" /> : null}
-          Agregar servicio
-        </button>
+      <div className="relative">
+        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
+          <Package size={14} className="text-neutral-400" />
+        </span>
+        <input type="text" placeholder="Nombre *" value={name} onChange={(e) => setName(e.target.value)}
+          className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300" />
       </div>
+
+      <div className="relative">
+        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
+          <FileText size={14} className="text-neutral-400" />
+        </span>
+        <input type="text" placeholder="Descripción" value={description} onChange={(e) => setDescription(e.target.value)}
+          className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300" />
+      </div>
+
+      <div className="relative">
+        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
+          <DollarSign size={14} className="text-neutral-400" />
+        </span>
+        <input type="number" placeholder="Precio *" min="0" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)}
+          className="w-full pl-8 pr-3 py-2 rounded-lg border border-neutral-200 bg-neutral-50 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-1 focus:ring-primary-300" />
+      </div>
+
+      {error && <p className="text-xs text-danger-500">{error}</p>}
+
+      <button type="button" onClick={handleSubmit} disabled={!isValid || isSubmitting}
+        className="w-full py-2 text-sm font-medium rounded-lg transition-colors flex items-center justify-center gap-2 bg-primary-500 text-white hover:bg-primary-600 disabled:bg-neutral-100 disabled:text-neutral-400 disabled:cursor-not-allowed cursor-pointer">
+        {isSubmitting && <Loader2 size={14} className="animate-spin" />}
+        Agregar servicio
+      </button>
     </div>
   );
 }
 
 // ─── New Sale Modal ───────────────────────────────────────────────────────────
+
+interface SaleFormData {
+  clientId: number | null;
+  serviceId: number | null;
+  amount: string;
+  saleDate: string;
+  dueDate: string;
+  notes: string;
+  isPaid: boolean;
+}
+
+const INITIAL_FORM: SaleFormData = {
+  clientId: null,
+  serviceId: null,
+  amount: "",
+  saleDate: new Date().toISOString().split("T")[0],
+  dueDate: "",
+  notes: "",
+  isPaid: false,
+};
 
 interface NewSaleModalProps {
   isOpen: boolean;
@@ -179,43 +295,42 @@ interface NewSaleModalProps {
   services: Service[];
   isClientsLoading: boolean;
   isServicesLoading: boolean;
-  createSale: (data: { clientId: number; serviceId: number; amount: number; saleDate: string; dueDate?: string | null; notes?: string | null }) => Promise<Sale | null>;
-  createClient: (data: { name: string; phone: string; email: string }) => Promise<Client | null>;
-  createService: (data: { name: string; description: string; price: number }) => Promise<Service | null>;
+  createSale: (data: {
+    clientId: number; serviceId: number; amount: number;
+    saleDate: string; dueDate?: string | null; notes?: string | null;
+    isPaid?: boolean;
+  }) => Promise<Sale | null>;
+  createClient: (data: { name: string; phone: string; email: string }) => Promise<Client>;
+  createService: (data: { name: string; description: string; price: number }) => Promise<Service>;
 }
 
-function NewSaleModal({ isOpen, onClose, clients, services, isClientsLoading, isServicesLoading, createSale, createClient, createService }: NewSaleModalProps) {
-  const [clientId, setClientId] = useState<number | null>(null);
-  const [serviceId, setServiceId] = useState<number | null>(null);
-  const [amount, setAmount] = useState("");
-  const [saleDate, setSaleDate] = useState(new Date().toISOString().split("T")[0]);
-  const [dueDate, setDueDate] = useState("");
-  const [notes, setNotes] = useState("");
-  const [showClientDropdown, setShowClientDropdown] = useState(false);
-  const [showServiceDropdown, setShowServiceDropdown] = useState(false);
+function NewSaleModal({
+  isOpen, onClose, clients, services,
+  isClientsLoading, isServicesLoading,
+  createSale, createClient, createService,
+}: NewSaleModalProps) {
+  const [form, setForm] = useState<SaleFormData>(INITIAL_FORM);
+  const [openDropdown, setOpenDropdown] = useState<"client" | "service" | null>(null);
   const [clientView, setClientView] = useState<"list" | "new">("list");
   const [serviceView, setServiceView] = useState<"list" | "new">("list");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const selectedClient = clients.find((c) => c.id === clientId);
-  const selectedService = services.find((s) => s.id === serviceId);
+  const selectedClient = clients.find((c) => c.id === form.clientId);
+  const selectedService = services.find((s) => s.id === form.serviceId);
+
+  const toggleDropdown = (name: "client" | "service") => {
+    setOpenDropdown((prev) => (prev === name ? null : name));
+  };
 
   const handleServiceSelect = (service: Service) => {
-    setServiceId(service.id);
-    setAmount(service.price.toString());
-    setShowServiceDropdown(false);
+    setForm((prev) => ({ ...prev, serviceId: service.id, amount: service.price.toString() }));
+    setOpenDropdown(null);
   };
 
   const handleClose = useCallback(() => {
-    setClientId(null);
-    setServiceId(null);
-    setAmount("");
-    setSaleDate(new Date().toISOString().split("T")[0]);
-    setDueDate("");
-    setNotes("");
-    setShowClientDropdown(false);
-    setShowServiceDropdown(false);
+    setForm(INITIAL_FORM);
+    setOpenDropdown(null);
     setClientView("list");
     setServiceView("list");
     setSubmitError(null);
@@ -223,28 +338,29 @@ function NewSaleModal({ isOpen, onClose, clients, services, isClientsLoading, is
   }, [onClose]);
 
   const handleSubmit = async () => {
-    if (!clientId || !serviceId || !amount || !saleDate) return;
+    if (!form.clientId || !form.serviceId || !form.amount || !form.saleDate) return;
     setIsSubmitting(true);
     setSubmitError(null);
 
     const sale = await createSale({
-      clientId,
-      serviceId,
-      amount: parseFloat(amount),
-      saleDate,
-      dueDate: dueDate || null,
-      notes: notes || null,
+      clientId: form.clientId,
+      serviceId: form.serviceId,
+      amount: parseFloat(form.amount),
+      saleDate: form.saleDate,
+      dueDate: form.dueDate || null,
+      notes: form.notes || null,
+      isPaid: form.isPaid,
     });
 
     if (sale) {
       handleClose();
     } else {
       setSubmitError("No se pudo guardar la venta. Intenta de nuevo.");
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   };
 
-  const isFormValid = !!clientId && !!serviceId && !!amount && parseFloat(amount) > 0 && !!saleDate;
+  const isFormValid = !!form.clientId && !!form.serviceId && !!form.amount && parseFloat(form.amount) > 0 && !!form.saleDate;
 
   if (!isOpen) return null;
 
@@ -254,191 +370,193 @@ function NewSaleModal({ isOpen, onClose, clients, services, isClientsLoading, is
 
       <div className="relative bg-white w-full max-w-lg mx-4 rounded-2xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="px-6 py-5 border-b border-neutral-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-semibold text-neutral-900">Registrar venta</h2>
-              <p className="text-sm text-neutral-500 mt-0.5">Completa los datos de la transacción</p>
-            </div>
-            <button onClick={handleClose} className="p-2 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer">
-              <X size={20} />
-            </button>
+        <div className="px-6 py-5 border-b border-neutral-100 flex items-center justify-between">
+          <div>
+            <h2 className="text-xl font-semibold text-neutral-900">Registrar venta</h2>
+            <p className="text-sm text-neutral-500 mt-0.5">Completa los datos de la transacción</p>
           </div>
+          <button onClick={handleClose} className="p-2 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer">
+            <X size={20} />
+          </button>
         </div>
 
         {/* Body */}
-        <div className="px-6 py-5 max-h-[calc(100vh-220px)] overflow-y-auto">
-          <div className="space-y-5">
+        <div className="px-6 py-5 max-h-[calc(100vh-220px)] overflow-y-auto space-y-5">
 
-            {/* Client */}
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                Cliente <span className="text-danger-500">*</span>
-              </label>
-              <div className="relative">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-                <button type="button"
-                  onClick={() => { setShowClientDropdown(!showClientDropdown); setShowServiceDropdown(false); }}
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-left text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 transition cursor-pointer">
-                  {selectedClient ? selectedClient.name : "Selecciona un cliente"}
-                </button>
-                <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 transition-transform ${showClientDropdown ? "rotate-180" : ""}`} />
-
-                {showClientDropdown && (
-                  <div className="mt-1 bg-white border border-neutral-200 rounded-xl shadow-sm overflow-hidden">
-                    {clientView === "new" ? (
-                      <NewClientForm
-                        onBack={() => setClientView("list")}
-                        createClient={createClient}
-                        onCreated={(client) => {
-                          setClientId(client.id);
-                          setClientView("list");
-                          setShowClientDropdown(false);
-                        }}
-                      />
-                    ) : (
-                      <>
-                        <div className="max-h-36 overflow-y-auto">
-                          {isClientsLoading ? (
-                            <div className="flex items-center justify-center py-4">
-                              <Loader2 size={16} className="animate-spin text-neutral-400" />
-                            </div>
-                          ) : clients.length === 0 ? (
-                            <p className="px-4 py-3 text-sm text-neutral-400">No hay clientes aún</p>
-                          ) : (
-                            clients.map((client) => (
-                              <button key={client.id} type="button"
-                                onClick={() => { setClientId(client.id); setShowClientDropdown(false); }}
-                                className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer ${clientId === client.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"}`}>
-                                <span className="font-medium">{client.name}</span>
-                                {client.email && <span className="text-neutral-400 ml-2">{client.email}</span>}
-                              </button>
-                            ))
-                          )}
+          {/* Client */}
+          <DropdownWrapper
+            label="Cliente" required
+            displayValue={selectedClient ? selectedClient.name : "Selecciona un cliente"}
+            isOpen={openDropdown === "client"}
+            onToggle={() => toggleDropdown("client")}
+            icon={<UserPlus size={16} />}
+            chevronOpen={openDropdown === "client"}
+          >
+            {clientView === "new" ? (
+              <NewClientForm
+                onBack={() => setClientView("list")}
+                createClient={createClient}
+                onCreated={(client) => {
+                  setForm((prev) => ({ ...prev, clientId: client.id }));
+                  setClientView("list");
+                  setOpenDropdown(null);
+                }}
+              />
+            ) : (
+              <>
+                <div className="max-h-40 overflow-y-auto">
+                  {isClientsLoading ? (
+                    <div className="flex items-center justify-center py-4">
+                      <Loader2 size={16} className="animate-spin text-neutral-400" />
+                    </div>
+                  ) : clients.length === 0 ? (
+                    <p className="px-4 py-3 text-sm text-neutral-400">No hay clientes aún</p>
+                  ) : (
+                    clients.map((client) => (
+                      <button key={client.id} type="button"
+                        onClick={() => { setForm((prev) => ({ ...prev, clientId: client.id })); setOpenDropdown(null); }}
+                        className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer flex items-center gap-3 ${form.clientId === client.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"}`}>
+                        <ClientAvatar name={client.name} />
+                        <div className="min-w-0">
+                          <p className="font-medium truncate">{client.name}</p>
+                          {client.email && <p className="text-xs text-neutral-400 truncate">{client.email}</p>}
                         </div>
-                        <div className="border-t border-neutral-100">
-                          <button type="button" onClick={() => setClientView("new")}
-                            className="w-full px-4 py-2.5 text-left text-sm text-primary-600 hover:bg-primary-50 transition-colors cursor-pointer flex items-center gap-2">
-                            <UserPlus size={16} />
-                            <span className="font-medium">Crear nuevo cliente</span>
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Service */}
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                Servicio <span className="text-danger-500">*</span>
-              </label>
-              <div className="relative">
-                <Package className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-                <button type="button"
-                  onClick={() => { setShowServiceDropdown(!showServiceDropdown); setShowClientDropdown(false); }}
-                  className="w-full pl-10 pr-10 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-left text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 transition cursor-pointer">
-                  {selectedService ? selectedService.name : "Selecciona un servicio"}
-                </button>
-                <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 transition-transform ${showServiceDropdown ? "rotate-180" : ""}`} />
-
-                {showServiceDropdown && (
-                  <div className="mt-1 bg-white border border-neutral-200 rounded-xl shadow-sm overflow-hidden">
-                    {serviceView === "new" ? (
-                      <NewServiceForm
-                        onBack={() => setServiceView("list")}
-                        createService={createService}
-                        onCreated={(service) => {
-                          handleServiceSelect(service);
-                          setServiceView("list");
-                        }}
-                      />
-                    ) : (
-                      <>
-                        <div className="max-h-48 overflow-y-auto">
-                          {isServicesLoading ? (
-                            <div className="flex items-center justify-center py-4">
-                              <Loader2 size={16} className="animate-spin text-neutral-400" />
-                            </div>
-                          ) : services.length === 0 ? (
-                            <p className="px-4 py-3 text-sm text-neutral-400">No hay servicios aún</p>
-                          ) : (
-                            services.map((service) => (
-                              <button key={service.id} type="button" onClick={() => handleServiceSelect(service)}
-                                className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer flex justify-between items-center ${serviceId === service.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"}`}>
-                                <span className="font-medium">{service.name}</span>
-                                <span className="text-neutral-500">${Number(service.price).toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
-                              </button>
-                            ))
-                          )}
-                        </div>
-                        <div className="border-t border-neutral-100">
-                          <button type="button" onClick={() => setServiceView("new")}
-                            className="w-full px-4 py-2.5 text-left text-sm text-primary-600 hover:bg-primary-50 transition-colors cursor-pointer flex items-center gap-2">
-                            <Plus size={16} />
-                            <span className="font-medium">Crear nuevo servicio</span>
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Amount */}
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                Monto <span className="text-danger-500">*</span>
-              </label>
-              <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-                <input type="number" step="0.01" min="0" placeholder="0.00" value={amount} onChange={(e) => setAmount(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-300 transition" />
-              </div>
-            </div>
-
-            {/* Dates */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                  Fecha de venta <span className="text-danger-500">*</span>
-                </label>
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-                  <input type="date" value={saleDate} onChange={(e) => setSaleDate(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 transition" />
+                      </button>
+                    ))
+                  )}
                 </div>
+                <div className="border-t border-neutral-100">
+                  <button type="button" onClick={() => setClientView("new")}
+                    className="w-full px-4 py-2.5 text-left text-sm text-primary-600 hover:bg-primary-50 transition-colors cursor-pointer flex items-center gap-2 font-medium">
+                    <Plus size={16} />
+                    Crear nuevo cliente
+                  </button>
+                </div>
+              </>
+            )}
+          </DropdownWrapper>
+
+          {/* Service */}
+          <DropdownWrapper
+            label="Servicio" required
+            displayValue={selectedService ? selectedService.name : "Selecciona un servicio"}
+            isOpen={openDropdown === "service"}
+            onToggle={() => toggleDropdown("service")}
+            icon={<Package size={16} />}
+            chevronOpen={openDropdown === "service"}
+          >
+            {serviceView === "new" ? (
+              <NewServiceForm
+                onBack={() => setServiceView("list")}
+                createService={createService}
+                onCreated={(service) => {
+                  handleServiceSelect(service);
+                  setServiceView("list");
+                }}
+              />
+            ) : (
+              <>
+                <div className="max-h-48 overflow-y-auto">
+                  {isServicesLoading ? (
+                    <div className="flex items-center justify-center py-4">
+                      <Loader2 size={16} className="animate-spin text-neutral-400" />
+                    </div>
+                  ) : services.length === 0 ? (
+                    <p className="px-4 py-3 text-sm text-neutral-400">No hay servicios aún</p>
+                  ) : (
+                    services.map((service) => (
+                      <button key={service.id} type="button" onClick={() => handleServiceSelect(service)}
+                        className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer flex justify-between items-center gap-2 ${form.serviceId === service.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"}`}>
+                        <span className="font-medium truncate">{service.name}</span>
+                        <span className="text-neutral-500 flex-shrink-0">{formatCurrency(Number(service.price))}</span>
+                      </button>
+                    ))
+                  )}
+                </div>
+                <div className="border-t border-neutral-100">
+                  <button type="button" onClick={() => setServiceView("new")}
+                    className="w-full px-4 py-2.5 text-left text-sm text-primary-600 hover:bg-primary-50 transition-colors cursor-pointer flex items-center gap-2 font-medium">
+                    <Plus size={16} />
+                    Crear nuevo servicio
+                  </button>
+                </div>
+              </>
+            )}
+          </DropdownWrapper>
+
+          {/* Amount */}
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+              Monto <span className="text-danger-500">*</span>
+            </label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <DollarSign size={16} className="text-neutral-400" />
+              </span>
+              <input type="number" step="0.01" min="0" placeholder="0.00"
+                value={form.amount}
+                onChange={(e) => setForm((prev) => ({ ...prev, amount: e.target.value }))}
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-300 transition" />
+            </div>
+          </div>
+
+          {/* Already paid toggle */}
+          <div className="py-1">
+            <Toggle
+              checked={form.isPaid}
+              onChange={(val) => setForm((prev) => ({ ...prev, isPaid: val, dueDate: val ? "" : prev.dueDate }))}
+              label="Venta ya pagada"
+            />
+          </div>
+
+          {/* Dates */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                Fecha de venta <span className="text-danger-500">*</span>
+              </label>
+              <div className="relative">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                  <Calendar size={16} className="text-neutral-400" />
+                </span>
+                <input type="date" value={form.saleDate}
+                  onChange={(e) => setForm((prev) => ({ ...prev, saleDate: e.target.value }))}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 transition" />
               </div>
+            </div>
+
+            {!form.isPaid && (
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1.5">
                   Fecha límite de pago
                 </label>
                 <div className="relative">
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-                  <input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 focus:outline-none focus:ring-2 focus:ring-primary-300 transition" />
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                    <Calendar size={16} className="text-neutral-400" />
+                  </span>
+                  <input type="date" value={form.dueDate}
+                    onChange={(e) => setForm((prev) => ({ ...prev, dueDate: e.target.value }))}
+                    className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 transition" />
                 </div>
               </div>
-            </div>
-
-            {/* Notes */}
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1.5">Notas</label>
-              <div className="relative">
-                <FileText className="absolute left-3 top-3 w-4 h-4 text-neutral-400" />
-                <textarea placeholder="Detalles adicionales de la venta..." value={notes} onChange={(e) => setNotes(e.target.value)}
-                  rows={3}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm text-neutral-800 placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-300 transition resize-none" />
-              </div>
-            </div>
-
-            {submitError && (
-              <p className="text-sm text-danger-500 text-center">{submitError}</p>
             )}
           </div>
+
+          {/* Notes */}
+          <div>
+            <label className="block text-sm font-medium text-neutral-700 mb-1.5">Notas</label>
+            <div className="relative">
+              <span className="absolute left-3 top-3 pointer-events-none">
+                <FileText size={16} className="text-neutral-400" />
+              </span>
+              <textarea placeholder="Detalles adicionales..." value={form.notes}
+                onChange={(e) => setForm((prev) => ({ ...prev, notes: e.target.value }))}
+                rows={3}
+                className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-neutral-200 bg-neutral-50 text-sm placeholder:text-neutral-400 focus:outline-none focus:ring-2 focus:ring-primary-300 transition resize-none" />
+            </div>
+          </div>
+
+          {submitError && <p className="text-sm text-danger-500 text-center">{submitError}</p>}
         </div>
 
         {/* Footer */}
@@ -448,9 +566,7 @@ function NewSaleModal({ isOpen, onClose, clients, services, isClientsLoading, is
             Cancelar
           </button>
           <button type="button" onClick={handleSubmit} disabled={!isFormValid || isSubmitting}
-            className={`px-5 py-2.5 text-sm font-medium rounded-lg transition-colors cursor-pointer flex items-center gap-2 ${
-              isFormValid && !isSubmitting ? "bg-primary-500 text-white hover:bg-primary-600" : "bg-neutral-200 text-neutral-400 cursor-not-allowed"
-            }`}>
+            className="px-5 py-2.5 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 bg-primary-500 text-white hover:bg-primary-600 disabled:bg-neutral-200 disabled:text-neutral-400 disabled:cursor-not-allowed cursor-pointer">
             {isSubmitting && <Loader2 size={14} className="animate-spin" />}
             Guardar venta
           </button>
@@ -464,7 +580,7 @@ function NewSaleModal({ isOpen, onClose, clients, services, isClientsLoading, is
 
 interface SaleCardProps {
   sale: Sale;
-  onMarkAsPaid: (id: number) => void;
+  onMarkAsPaid: (id: number) => Promise<boolean>;
 }
 
 function SaleCard({ sale, onMarkAsPaid }: SaleCardProps) {
@@ -479,53 +595,63 @@ function SaleCard({ sale, onMarkAsPaid }: SaleCardProps) {
 
   return (
     <div className="bg-white rounded-xl shadow-sm p-5 flex flex-col gap-4">
-      <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-700 font-medium">
-            {sale.client.name.charAt(0).toUpperCase()}
-          </div>
-          <div>
-            <p className="font-medium text-neutral-900">{sale.client.name}</p>
-            <p className="text-xs text-neutral-500">
-              {new Date(sale.saleDate).toLocaleDateString("es-ES", { day: "numeric", month: "short", year: "numeric" })}
-            </p>
+      {/* Header */}
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-3 min-w-0">
+          <ClientAvatar name={sale.client.name} />
+          <div className="min-w-0">
+            <p className="font-medium text-neutral-900 truncate">{sale.client.name}</p>
+            <p className="text-xs text-neutral-500">{formatDate(sale.saleDate)}</p>
           </div>
         </div>
         <StatusBadge isPaid={sale.isPaid} />
       </div>
 
+      {/* Service */}
       <div className="flex items-center gap-2 text-neutral-600">
-        <Package size={14} className="text-neutral-400" />
-        <span className="text-sm">{sale.service.name}</span>
+        <Package size={14} className="text-neutral-400 flex-shrink-0" />
+        <span className="text-sm truncate">{sale.service.name}</span>
       </div>
 
+      {/* Amount */}
       <div>
         <p className="text-xs text-neutral-500 uppercase tracking-wide">Monto Total</p>
-        <p className="text-2xl font-bold text-neutral-900">
-          ${Number(sale.amount).toLocaleString("en-US", { minimumFractionDigits: 2 })}
-        </p>
+        <p className="text-2xl font-bold text-neutral-900">{formatCurrency(Number(sale.amount))}</p>
       </div>
 
-      <div className="flex items-center justify-between pt-2 border-t border-neutral-100">
-        <div className="flex items-center gap-2">
-          <button className="p-2 text-neutral-500 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer">
-            <Eye size={18} />
-          </button>
-          <button
-            onClick={handleMarkAsPaid}
-            disabled={sale.isPaid || isMarking}
-            className={`p-2 rounded-lg transition-colors cursor-pointer ${
-              sale.isPaid ? "text-success-500 hover:bg-success-50" : "text-neutral-400 hover:bg-neutral-100"
-            } disabled:cursor-default`}>
-            {isMarking ? <Loader2 size={18} className="animate-spin" /> : <Check size={18} />}
-          </button>
-        </div>
-        <button className={`flex items-center gap-1 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
-          sale.isPaid ? "text-success-600 hover:bg-success-50" : "text-warning-600 hover:bg-warning-50"
-        }`}>
-          <MessageCircle size={16} />
-          {sale.isPaid ? "Recibo" : "Recordar"}
-        </button>
+      {/* Actions */}
+      <div className="pt-2 border-t border-neutral-100">
+        {sale.isPaid ? (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-1.5 text-success-600">
+              <Check size={16} />
+              <span className="text-sm font-medium">Pagada</span>
+            </div>
+            <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-success-600 hover:bg-success-50 rounded-lg transition-colors cursor-pointer">
+              <MessageCircle size={15} />
+              Recibo
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center justify-between">
+            <button className="p-2 text-neutral-400 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer">
+              <Eye size={18} />
+            </button>
+            <div className="flex items-center gap-2">
+              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-warning-600 hover:bg-warning-50 rounded-lg transition-colors cursor-pointer">
+                <MessageCircle size={15} />
+                Recordar
+              </button>
+              <button
+                onClick={handleMarkAsPaid}
+                disabled={isMarking}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-success-500 hover:bg-success-600 rounded-lg transition-colors cursor-pointer disabled:opacity-60">
+                {isMarking ? <Loader2 size={15} className="animate-spin" /> : <Check size={15} />}
+                Marcar pagada
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -540,9 +666,9 @@ export default function SalesPage() {
   const { companyId, isLoading: isCompanyLoading } = useCompany();
   const { clients, isLoading: isClientsLoading, createClient } = useClients(companyId);
   const { services, isLoading: isServicesLoading, createService } = useServices(companyId);
-  const { sales, isLoading, stats, last7Days, topServices, createSale, markAsPaid } = useSales(companyId);
+  const { sales, isLoading: isSalesLoading, stats, last7Days, topServices, createSale, markAsPaid } = useSales(companyId);
 
-  const isPageLoading = isCompanyLoading || isLoading;
+  const isPageLoading = isCompanyLoading || isSalesLoading;
   const visibleSales = sales.slice(0, visibleCount);
 
   return (
@@ -551,39 +677,32 @@ export default function SalesPage() {
 
       {/* Actions */}
       <div className="flex flex-wrap items-center gap-3">
-        <button
-          onClick={() => setIsModalOpen(true)}
+        <button onClick={() => setIsModalOpen(true)}
           className="px-5 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 cursor-pointer font-medium transition-colors">
           + Nueva Venta
         </button>
         <span className="px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">
-          Ventas del mes {isPageLoading ? "..." : stats.monthSalesCount}
+          Ventas del mes: {isPageLoading ? "..." : stats.monthSalesCount}
         </span>
         <span className="px-4 py-2 bg-warning-100 text-warning-700 rounded-full text-sm font-medium">
-          Pendientes {isPageLoading ? "..." : stats.pendingSalesCount}
+          Pendientes: {isPageLoading ? "..." : stats.pendingSalesCount}
         </span>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl shadow-sm p-5">
-          <p className="text-xs text-neutral-500 uppercase tracking-wide font-medium">Total Ventas</p>
-          <p className="text-3xl font-bold text-neutral-900 mt-1">
-            {isPageLoading ? "..." : `$${stats.totalAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl shadow-sm p-5">
-          <p className="text-xs text-success-600 uppercase tracking-wide font-medium">Recaudado</p>
-          <p className="text-3xl font-bold text-neutral-900 mt-1">
-            {isPageLoading ? "..." : `$${stats.collectedAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
-          </p>
-        </div>
-        <div className="bg-white rounded-xl shadow-sm p-5">
-          <p className="text-xs text-warning-600 uppercase tracking-wide font-medium">Por Cobrar</p>
-          <p className="text-3xl font-bold text-neutral-900 mt-1">
-            {isPageLoading ? "..." : `$${stats.pendingAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}`}
-          </p>
-        </div>
+        {[
+          { label: "Total Ventas", value: stats.totalAmount, color: "text-neutral-500" },
+          { label: "Recaudado", value: stats.collectedAmount, color: "text-success-600" },
+          { label: "Por Cobrar", value: stats.pendingAmount, color: "text-warning-600" },
+        ].map(({ label, value, color }) => (
+          <div key={label} className="bg-white rounded-xl shadow-sm p-5">
+            <p className={`text-xs uppercase tracking-wide font-medium ${color}`}>{label}</p>
+            <p className="text-3xl font-bold text-neutral-900 mt-1">
+              {isPageLoading ? "..." : formatCurrency(value)}
+            </p>
+          </div>
+        ))}
       </div>
 
       {/* Charts */}
@@ -614,8 +733,8 @@ export default function SalesPage() {
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie data={topServices} cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={2} dataKey="quantity" nameKey="name">
-                    {topServices.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    {topServices.map((_, index) => (
+                      <Cell key={`cell-${index}`} fill={topServices[index].color} />
                     ))}
                   </Pie>
                   <Tooltip contentStyle={{ backgroundColor: "#fff", border: "1px solid #E5E7EB", borderRadius: "8px" }} />
@@ -647,10 +766,8 @@ export default function SalesPage() {
               <SaleCard key={sale.id} sale={sale} onMarkAsPaid={markAsPaid} />
             ))}
           </div>
-
           {visibleCount < sales.length && (
-            <button
-              onClick={() => setVisibleCount((v) => v + 8)}
+            <button onClick={() => setVisibleCount((v) => v + 8)}
               className="mx-auto text-neutral-500 hover:text-neutral-700 text-sm font-medium flex items-center gap-1 cursor-pointer">
               Ver más ventas <span className="text-xs">▼</span>
             </button>
