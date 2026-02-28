@@ -30,8 +30,8 @@ export function useServices(companyId: number | null) {
   }, [companyId]);
 
   const createService = useCallback(
-    async (data: Omit<CreateServiceDTO, "companyId">): Promise<Service | null> => {
-      if (!companyId) return null;
+    async (data: Omit<CreateServiceDTO, "companyId">): Promise<Service> => {
+      if (!companyId) throw new Error("No company selected");
       try {
         const res = await fetch(`/api/service/company/${companyId}`, {
           method: "POST",

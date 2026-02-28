@@ -59,11 +59,11 @@ export function SaleCard({ sale, onMarkAsPaid }: SaleCardProps) {
             </button>
           </div>
         ) : (
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between flex-wrap gap-2">
             <button className="p-2 text-neutral-400 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer">
               <Eye size={18} />
             </button>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-warning-600 hover:bg-warning-50 rounded-lg transition-colors cursor-pointer">
                 <MessageCircle size={15} />
                 Recordar
