@@ -177,12 +177,14 @@ interface NewSaleModalProps {
   onClose: () => void;
   clients: Client[];
   services: Service[];
+  isClientsLoading: boolean;
+  isServicesLoading: boolean;
   createSale: (data: { clientId: number; serviceId: number; amount: number; saleDate: string; dueDate?: string | null; notes?: string | null }) => Promise<Sale | null>;
   createClient: (data: { name: string; phone: string; email: string }) => Promise<Client | null>;
   createService: (data: { name: string; description: string; price: number }) => Promise<Service | null>;
 }
 
-function NewSaleModal({ isOpen, onClose, clients, services, createSale, createClient, createService }: NewSaleModalProps) {
+function NewSaleModal({ isOpen, onClose, clients, services, isClientsLoading, isServicesLoading, createSale, createClient, createService }: NewSaleModalProps) {
   const [clientId, setClientId] = useState<number | null>(null);
   const [serviceId, setServiceId] = useState<number | null>(null);
   const [amount, setAmount] = useState("");
@@ -283,7 +285,7 @@ function NewSaleModal({ isOpen, onClose, clients, services, createSale, createCl
                 <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 transition-transform ${showClientDropdown ? "rotate-180" : ""}`} />
 
                 {showClientDropdown && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-200 rounded-xl shadow-lg overflow-hidden">
+                  <div className="mt-1 bg-white border border-neutral-200 rounded-xl shadow-sm overflow-hidden">
                     {clientView === "new" ? (
                       <NewClientForm
                         onBack={() => setClientView("list")}
@@ -297,17 +299,22 @@ function NewSaleModal({ isOpen, onClose, clients, services, createSale, createCl
                     ) : (
                       <>
                         <div className="max-h-36 overflow-y-auto">
-                          {clients.length === 0 && (
+                          {isClientsLoading ? (
+                            <div className="flex items-center justify-center py-4">
+                              <Loader2 size={16} className="animate-spin text-neutral-400" />
+                            </div>
+                          ) : clients.length === 0 ? (
                             <p className="px-4 py-3 text-sm text-neutral-400">No hay clientes aún</p>
+                          ) : (
+                            clients.map((client) => (
+                              <button key={client.id} type="button"
+                                onClick={() => { setClientId(client.id); setShowClientDropdown(false); }}
+                                className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer ${clientId === client.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"}`}>
+                                <span className="font-medium">{client.name}</span>
+                                {client.email && <span className="text-neutral-400 ml-2">{client.email}</span>}
+                              </button>
+                            ))
                           )}
-                          {clients.map((client) => (
-                            <button key={client.id} type="button"
-                              onClick={() => { setClientId(client.id); setShowClientDropdown(false); }}
-                              className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer ${clientId === client.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"}`}>
-                              <span className="font-medium">{client.name}</span>
-                              {client.email && <span className="text-neutral-400 ml-2">{client.email}</span>}
-                            </button>
-                          ))}
                         </div>
                         <div className="border-t border-neutral-100">
                           <button type="button" onClick={() => setClientView("new")}
@@ -338,7 +345,7 @@ function NewSaleModal({ isOpen, onClose, clients, services, createSale, createCl
                 <ChevronDown className={`absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 transition-transform ${showServiceDropdown ? "rotate-180" : ""}`} />
 
                 {showServiceDropdown && (
-                  <div className="absolute z-10 w-full mt-1 bg-white border border-neutral-200 rounded-xl shadow-lg overflow-hidden">
+                  <div className="mt-1 bg-white border border-neutral-200 rounded-xl shadow-sm overflow-hidden">
                     {serviceView === "new" ? (
                       <NewServiceForm
                         onBack={() => setServiceView("list")}
@@ -351,16 +358,21 @@ function NewSaleModal({ isOpen, onClose, clients, services, createSale, createCl
                     ) : (
                       <>
                         <div className="max-h-48 overflow-y-auto">
-                          {services.length === 0 && (
+                          {isServicesLoading ? (
+                            <div className="flex items-center justify-center py-4">
+                              <Loader2 size={16} className="animate-spin text-neutral-400" />
+                            </div>
+                          ) : services.length === 0 ? (
                             <p className="px-4 py-3 text-sm text-neutral-400">No hay servicios aún</p>
+                          ) : (
+                            services.map((service) => (
+                              <button key={service.id} type="button" onClick={() => handleServiceSelect(service)}
+                                className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer flex justify-between items-center ${serviceId === service.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"}`}>
+                                <span className="font-medium">{service.name}</span>
+                                <span className="text-neutral-500">${Number(service.price).toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+                              </button>
+                            ))
                           )}
-                          {services.map((service) => (
-                            <button key={service.id} type="button" onClick={() => handleServiceSelect(service)}
-                              className={`w-full px-4 py-2.5 text-left text-sm hover:bg-primary-50 transition-colors cursor-pointer flex justify-between items-center ${serviceId === service.id ? "bg-primary-50 text-primary-700" : "text-neutral-700"}`}>
-                              <span className="font-medium">{service.name}</span>
-                              <span className="text-neutral-500">${Number(service.price).toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
-                            </button>
-                          ))}
                         </div>
                         <div className="border-t border-neutral-100">
                           <button type="button" onClick={() => setServiceView("new")}
@@ -526,8 +538,8 @@ export default function SalesPage() {
   const [visibleCount, setVisibleCount] = useState(8);
 
   const { companyId, isLoading: isCompanyLoading } = useCompany();
-  const { clients, createClient } = useClients(companyId);
-  const { services, createService } = useServices(companyId);
+  const { clients, isLoading: isClientsLoading, createClient } = useClients(companyId);
+  const { services, isLoading: isServicesLoading, createService } = useServices(companyId);
   const { sales, isLoading, stats, last7Days, topServices, createSale, markAsPaid } = useSales(companyId);
 
   const isPageLoading = isCompanyLoading || isLoading;
@@ -651,6 +663,8 @@ export default function SalesPage() {
         onClose={() => setIsModalOpen(false)}
         clients={clients}
         services={services}
+        isClientsLoading={isCompanyLoading || isClientsLoading}
+        isServicesLoading={isCompanyLoading || isServicesLoading}
         createSale={createSale}
         createClient={createClient}
         createService={createService}
