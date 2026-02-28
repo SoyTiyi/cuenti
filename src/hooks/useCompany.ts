@@ -35,5 +35,5 @@ export function useCompany() {
     fetchCompany();
   }, [isUserLoading, user?.email]);
 
-  return { companyId, isLoading: isLoading || isUserLoading, error };
+  return { companyId, isLoading: isLoading || isUserLoading, error, userName: user?.name ?? "" };
 }

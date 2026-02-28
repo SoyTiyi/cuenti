@@ -8,7 +8,7 @@ import { useClients } from "@/hooks/useClients";
 import { useServices } from "@/hooks/useServices";
 import { useSales } from "@/hooks/useSales";
 
-import { SaleCard, SaleStats, SaleCharts, NewSaleModal } from "@/components/sales";
+import { SaleCard, SaleStats, NewSaleModal } from "@/components/sales";
 
 const PAGE_SIZE = 8;
 
@@ -19,7 +19,7 @@ export default function SalesPage() {
   const { companyId, isLoading: isCompanyLoading } = useCompany();
   const { clients, isLoading: isClientsLoading, createClient } = useClients(companyId);
   const { services, isLoading: isServicesLoading, createService } = useServices(companyId);
-  const { sales, isLoading: isSalesLoading, stats, last7Days, topServices, createSale, markAsPaid } = useSales(companyId);
+  const { sales, isLoading: isSalesLoading, stats, createSale, markAsPaid } = useSales(companyId);
 
   const isPageLoading = isCompanyLoading || isSalesLoading;
   const visibleSales = sales.slice(0, visibleCount);
@@ -45,8 +45,6 @@ export default function SalesPage() {
       </div>
 
       <SaleStats stats={stats} isLoading={isPageLoading} />
-
-      <SaleCharts last7Days={last7Days} topServices={topServices} />
 
       {/* Sales list */}
       {isPageLoading ? (
