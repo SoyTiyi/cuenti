@@ -33,6 +33,8 @@ export interface CreateSaleDTO {
   saleDate: string;
   dueDate?: string | null;
   notes?: string | null;
+  isPaid?: boolean;
+  paymentDate?: string | null;
 }
 
 export interface SaleStats {
