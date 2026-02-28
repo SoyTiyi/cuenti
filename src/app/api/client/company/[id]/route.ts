@@ -24,8 +24,13 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
         const result = await clientService.createClient(data, id);
 
         return new Response(JSON.stringify(result), { status: 201 });
-    } catch (error) {
+    } catch (error: unknown) {
         console.error("Error creating client:", error);
-        return new Response(JSON.stringify({ message: "Error creating client" }), { status: 500 });
+        const isUniqueConstraint =
+          typeof error === "object" && error !== null && "code" in error && (error as { code: string }).code === "P2002";
+        const message = isUniqueConstraint
+          ? "Ya existe un cliente con ese correo electrónico"
+          : "Error creating client";
+        return new Response(JSON.stringify({ message }), { status: isUniqueConstraint ? 409 : 500 });
     }
 }   
