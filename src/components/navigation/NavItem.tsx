@@ -8,15 +8,17 @@ interface NavItemProps {
   href: string;
   icon: LucideIcon;
   label: string;
+  onNavigate?: () => void;
 }
 
-export default function NavItem({ href, icon: Icon, label }: NavItemProps) {
+export default function NavItem({ href, icon: Icon, label, onNavigate }: NavItemProps) {
   const pathname = usePathname();
   const isActive = pathname === href;
 
   return (
     <Link
       href={href}
+      onClick={onNavigate}
       className={`
         flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200
         ${isActive
