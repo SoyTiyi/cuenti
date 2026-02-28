@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Loader2, UserPlus } from "lucide-react";
 import { useCompany } from "@/hooks/useCompany";
 import { useClients } from "@/hooks/useClients";
+import { useScrollLock } from "@/hooks/useScrollLock";
 import { ClientStats, ClientCharts, ClientList, ClientDetail, NewClientForm } from "@/components/clients";
 import type { ClientWithStats } from "@/lib/types/client/types";
 
@@ -13,12 +14,13 @@ export default function ClientsPage() {
 
   const { companyId, isLoading: isCompanyLoading } = useCompany();
   const { clients, isLoading: isClientsLoading, createClient } = useClients(companyId);
+  useScrollLock(isModalOpen);
 
   const isLoading = isCompanyLoading || isClientsLoading;
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pt-2">
         <h1 className="text-2xl font-bold text-neutral-900">Clientes</h1>
         <button
           onClick={() => setIsModalOpen(true)}

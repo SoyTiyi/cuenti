@@ -4,12 +4,13 @@ import { useState, useEffect, useCallback } from "react";
 import { Client, ClientWithStats, CreateClientDTO } from "@/lib/types/client/types";
 
 function computeClientStats(client: Client): ClientWithStats {
-  const totalSpent = client.sales.reduce((acc, s) => acc + Number(s.amount), 0);
-  const pendingAmount = client.sales
+  const sales = client.sales ?? [];
+  const totalSpent = sales.reduce((acc, s) => acc + Number(s.amount), 0);
+  const pendingAmount = sales
     .filter((s) => !s.isPaid)
     .reduce((acc, s) => acc + (Number(s.amount) - Number(s.paidAmount)), 0);
-  const visitCount = client.sales.length;
-  const lastVisit = client.sales.length > 0 ? client.sales[0].saleDate : null;
+  const visitCount = sales.length;
+  const lastVisit = sales.length > 0 ? sales[0].saleDate : null;
 
   return { ...client, totalSpent, pendingAmount, visitCount, lastVisit };
 }

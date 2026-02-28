@@ -3,6 +3,7 @@
 import { X, Phone, Mail, Package, AlertCircle, Check } from "lucide-react";
 import { ClientAvatar } from "@/components/ui";
 import { formatCurrency, formatDate } from "@/lib/utils/formatters";
+import { useScrollLock } from "@/hooks/useScrollLock";
 import type { ClientWithStats } from "@/lib/types/client/types";
 
 interface ClientDetailProps {
@@ -11,6 +12,7 @@ interface ClientDetailProps {
 }
 
 export function ClientDetail({ client, onClose }: ClientDetailProps) {
+  useScrollLock(!!client);
   if (!client) return null;
 
   return (
