@@ -8,6 +8,7 @@ import { ServiceSelect } from "./ServiceSelect";
 import type { Client } from "@/lib/types/client/types";
 import type { Service } from "@/lib/types/service/types";
 import type { Sale, CreateSaleDTO } from "@/lib/types/sale/type";
+import { useScrollLock } from "@/hooks/useScrollLock";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -51,6 +52,7 @@ export function NewSaleModal({
   isClientsLoading, isServicesLoading,
   createSale, createClient, createService,
 }: NewSaleModalProps) {
+  useScrollLock(isOpen);
   const [form, setForm] = useState<SaleFormData>(INITIAL_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
