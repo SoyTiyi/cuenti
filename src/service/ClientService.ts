@@ -3,11 +3,11 @@ import { CreateClientDTO } from '@/lib/types/client/types';
 
 class ClientService {
     async createClient(data: CreateClientDTO, companyId: string) {
-        prisma.client.create({
+        return prisma.client.create({
             data: {
                 name: data.name,
-                phone: data.phone,
-                email: data.email,
+                phone: data.phone || null,
+                email: data.email || null,
                 company: {
                     connect: {
                         id: Number(companyId),
