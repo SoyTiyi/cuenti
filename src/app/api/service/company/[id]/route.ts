@@ -1,5 +1,5 @@
 import { serviceService } from "@/service/ServiceService";
-import { CreateServiceDTO } from "@/lib/types/service/types";
+import type { CreateServiceDTO } from "@/lib/types/service/types";
 
 export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
