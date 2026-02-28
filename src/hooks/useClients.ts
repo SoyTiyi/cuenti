@@ -38,13 +38,16 @@ export function useClients(companyId: number | null) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ ...data, companyId }),
         });
-        if (!res.ok) throw new Error("Error al crear el cliente");
+        if (!res.ok) {
+          const body = await res.json().catch(() => ({}));
+          throw new Error(body.message || "Error al crear el cliente");
+        }
         const newClient: Client = await res.json();
         setClients((prev) => [...prev, newClient]);
         return newClient;
       } catch (err) {
         console.error(err);
-        return null;
+        throw err;
       }
     },
     [companyId]

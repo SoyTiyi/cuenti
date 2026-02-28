@@ -53,11 +53,11 @@ function NewClientForm({ onBack, onCreated, createClient }: NewClientFormProps) 
     if (!name.trim()) return;
     setIsSubmitting(true);
     setError(null);
-    const client = await createClient({ name, phone, email });
-    if (client) {
-      onCreated(client);
-    } else {
-      setError("No se pudo crear el cliente. Intenta de nuevo.");
+    try {
+      const client = await createClient({ name, phone, email });
+      if (client) onCreated(client);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "No se pudo crear el cliente. Intenta de nuevo.");
     }
     setIsSubmitting(false);
   };
