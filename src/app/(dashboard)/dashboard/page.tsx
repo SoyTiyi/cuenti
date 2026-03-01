@@ -12,14 +12,19 @@ import {
 } from "@/components/dashboard";
 
 export default function DashboardPage() {
-  const { companyId, isLoading: isCompanyLoading, userName } = useCompany();
+  const { companyId, isLoading: isCompanyLoading, userName, companyName, companyImage, companyAddress } = useCompany();
   const { sales, isLoading: isSalesLoading, stats, last7Days, topServices } = useSales(companyId);
 
   const isLoading = isCompanyLoading || isSalesLoading;
 
   return (
     <div className="flex flex-col gap-6">
-      <DashboardGreeting userName={userName} />
+      <DashboardGreeting
+        userName={userName}
+        companyName={companyName}
+        companyImage={companyImage}
+        companyAddress={companyAddress}
+      />
 
       <DashboardStats stats={stats} isLoading={isLoading} />
 

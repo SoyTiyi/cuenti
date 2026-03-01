@@ -3,9 +3,17 @@
 import { useState, useEffect } from "react";
 import { useUser } from "@auth0/nextjs-auth0/client";
 
+interface CompanyData {
+  id: number;
+  name: string;
+  address: string;
+  description: string;
+  companyImage: string | null;
+}
+
 export function useCompany() {
   const { user, isLoading: isUserLoading } = useUser();
-  const [companyId, setCompanyId] = useState<number | null>(null);
+  const [company, setCompany] = useState<CompanyData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,8 +31,8 @@ export function useCompany() {
 
         if (!res.ok) throw new Error("Error al obtener la empresa");
 
-        const company = await res.json();
-        setCompanyId(company.id);
+        const data = await res.json();
+        setCompany(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Error desconocido");
       } finally {
@@ -35,5 +43,14 @@ export function useCompany() {
     fetchCompany();
   }, [isUserLoading, user?.email]);
 
-  return { companyId, isLoading: isLoading || isUserLoading, error, userName: user?.name ?? "" };
+  return {
+    companyId: company?.id ?? null,
+    companyName: company?.name ?? "",
+    companyImage: company?.companyImage ?? null,
+    companyAddress: company?.address ?? "",
+    companyDescription: company?.description ?? "",
+    isLoading: isLoading || isUserLoading,
+    error,
+    userName: user?.name ?? "",
+  };
 }
