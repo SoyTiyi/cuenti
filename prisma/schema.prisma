@@ -54,6 +54,8 @@ model Service {
   sales       Sale[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([companyId])
 }
 
 model Client {
@@ -68,6 +70,8 @@ model Client {
   updatedAt DateTime @updatedAt
 
   @@unique([email, companyId])
+  @@index([companyId])
+  @@index([name])
 }
 
 model Sale {
@@ -87,6 +91,9 @@ model Sale {
   saleDate    DateTime  @default(now()) 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@index([companyId, saleDate])
+  @@index([companyId, isPaid])
 }
 
 model Category {
@@ -110,4 +117,7 @@ model Expense {
   companyId   Int
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@index([companyId, date])
+  @@index([companyId, categoryId])
 }
