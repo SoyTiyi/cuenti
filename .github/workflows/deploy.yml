@@ -28,6 +28,9 @@ jobs:
 
     - name: Generate Prisma Client
       run: npx prisma generate
+      env:
+        # Dummy database URL for build-time only (Prisma needs it to generate client)
+        DATABASE_URL: postgresql://dummy:dummy@localhost:5432/dummy
 
     - name: Lint
       run: npm run lint
