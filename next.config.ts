@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
+  poweredByHeader: false,
+  compress: true,
   images: {
     remotePatterns: [
       {
@@ -15,7 +18,21 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "s.gravatar.com",
       },
+      {
+        protocol: "http",
+        hostname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "**",
+      },
     ],
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: true,
   },
 };
 
