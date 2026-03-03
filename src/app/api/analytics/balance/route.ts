@@ -1,4 +1,5 @@
 import { analyticsService } from "@/service/AnalyticsService";
+import { apiCache } from "@/lib/cache";
 
 export async function GET(request: Request) {
   try {
@@ -10,7 +11,21 @@ export async function GET(request: Request) {
       return Response.json({ message: "companyId required" }, { status: 400 });
     }
 
+    // Cache key includes companyId and months
+    const cacheKey = `analytics:balance:${companyId}:${months}`;
+    
+    // Try to get from cache
+    const cached = apiCache.get(cacheKey);
+    if (cached) {
+      return Response.json(cached, { status: 200 });
+    }
+
+    // Fetch from database
     const balance = await analyticsService.getMonthlyBalance(companyId, months);
+    
+    // Store in cache
+    apiCache.set(cacheKey, balance);
+    
     return Response.json(balance, { status: 200 });
   } catch (error) {
     console.error("Error fetching balance:", error);

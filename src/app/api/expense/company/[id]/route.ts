@@ -1,4 +1,5 @@
 import { expenseService } from "@/service/ExpenseService";
+import { apiCache } from "@/lib/cache";
 import { CreateExpenseDTO } from "@/lib/types/expense/types";
 
 export async function GET(
@@ -7,7 +8,19 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
+    const cacheKey = `expenses:company:${id}`;
+    
+    // Try cache first
+    const cached = apiCache.get(cacheKey);
+    if (cached) {
+      return Response.json(cached, { status: 200 });
+    }
+    
     const expenses = await expenseService.getExpensesByCompanyId(id);
+    
+    // Cache the result
+    apiCache.set(cacheKey, expenses);
+    
     return Response.json(expenses, { status: 200 });
   } catch (error) {
     console.error("Error fetching expenses:", error);
@@ -29,6 +42,12 @@ export async function POST(
     };
 
     const expense = await expenseService.createExpense(data);
+    
+    // Invalidate cache for this company
+    apiCache.invalidate(`expenses:company:${id}`);
+    // Also invalidate analytics cache
+    apiCache.invalidatePattern(`analytics:balance:${id}`);
+    
     return Response.json(expense, { status: 201 });
   } catch (error) {
     console.error("Error creating expense:", error);

@@ -15,16 +15,18 @@ const DAY_LABELS: Record<number, string> = {
   6: "Sáb",
 };
 
-function toLocalDateStr(date: Date): string {
-  const y = date.getFullYear();
-  const m = String(date.getMonth() + 1).padStart(2, "0");
-  const d = String(date.getDate()).padStart(2, "0");
+function toISODateStr(date: Date): string {
+  // Use UTC to match database format
+  const y = date.getUTCFullYear();
+  const m = String(date.getUTCMonth() + 1).padStart(2, "0");
+  const d = String(date.getUTCDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
 }
 
 function computeStats(sales: Sale[]): SaleStats {
   const now = new Date();
-  const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  // Use UTC for consistency
+  const startOfMonth = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
 
   const monthlySales = sales.filter((s) => new Date(s.saleDate) >= startOfMonth);
 
@@ -44,8 +46,9 @@ function computeLast7Days(sales: Sale[]): SalesChartDay[] {
   for (let i = 6; i >= 0; i--) {
     const date = new Date(today);
     date.setDate(today.getDate() - i);
-    const dateStr = toLocalDateStr(date);
+    const dateStr = toISODateStr(date);
 
+    // Compare with saleDate in ISO format (YYYY-MM-DD from YYYY-MM-DDTHH:mm:ss.sssZ)
     const count = sales.filter((s) => s.saleDate.split("T")[0] === dateStr).length;
     days.push({ day: DAY_LABELS[date.getDay()], sales: count });
   }
