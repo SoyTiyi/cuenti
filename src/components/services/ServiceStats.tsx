@@ -29,11 +29,11 @@ export function ServiceStats({ services, isLoading }: ServiceStatsProps) {
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
       {stats.map(({ label, value, color }) => (
-        <div key={label} className="bg-white rounded-xl shadow-sm p-5">
-          <p className={`text-xs uppercase tracking-wide font-medium ${color}`}>{label}</p>
-          <p className="text-2xl font-bold text-neutral-900 mt-1 truncate">
+        <div key={label} className="bg-white rounded-xl shadow-sm p-4 md:p-5">
+          <p className={`text-[10px] md:text-xs uppercase tracking-wide font-medium ${color}`}>{label}</p>
+          <p className="text-lg md:text-2xl font-bold text-neutral-900 mt-1 truncate">
             {isLoading ? "..." : value}
           </p>
         </div>
