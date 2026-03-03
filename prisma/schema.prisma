@@ -91,7 +91,7 @@ model Sale {
 
 model Category {
   id          Int       @id @default(autoincrement())
-  name        String
+  name        String    @unique
   description String?
   color       String?   @default("#6366F1")
   expenses    Expense[]
