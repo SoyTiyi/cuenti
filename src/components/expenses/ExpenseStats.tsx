@@ -14,21 +14,21 @@ const STAT_ITEMS = [
 
 export function ExpenseStats({ stats, isLoading }: ExpenseStatsProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
       {STAT_ITEMS.map(({ key, label, color }) => (
-        <div key={key} className="bg-white rounded-xl shadow-sm p-5">
-          <p className={`text-xs uppercase tracking-wide font-medium ${color}`}>{label}</p>
-          <p className="text-3xl font-bold text-neutral-900 mt-1">
+        <div key={key} className="bg-white rounded-xl shadow-sm p-4 md:p-5">
+          <p className={`text-[10px] md:text-xs uppercase tracking-wide font-medium ${color}`}>{label}</p>
+          <p className="text-xl md:text-3xl font-bold text-neutral-900 mt-1 truncate">
             {isLoading ? "..." : key === "count" ? stats[key] : formatCurrency(stats[key])}
           </p>
         </div>
       ))}
-      <div className="bg-white rounded-xl shadow-sm p-5">
-        <p className="text-xs uppercase tracking-wide font-medium text-primary-600">Mayor Categoría</p>
-        <p className="text-lg font-bold text-neutral-900 mt-1 truncate">
+      <div className="bg-white rounded-xl shadow-sm p-4 md:p-5">
+        <p className="text-[10px] md:text-xs uppercase tracking-wide font-medium text-primary-600">Mayor Categoría</p>
+        <p className="text-sm md:text-lg font-bold text-neutral-900 mt-1 truncate">
           {isLoading ? "..." : stats.topCategory?.name || "—"}
         </p>
-        <p className="text-xs text-neutral-400">
+        <p className="text-[10px] md:text-xs text-neutral-400">
           {stats.topCategory ? formatCurrency(stats.topCategory.amount) : ""}
         </p>
       </div>
