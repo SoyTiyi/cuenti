@@ -54,7 +54,8 @@ export const ModelName = {
   Service: 'Service',
   Client: 'Client',
   Sale: 'Sale',
-  Category: 'Category'
+  Category: 'Category',
+  Expense: 'Expense'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -152,11 +153,26 @@ export const CategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
+  color: 'color',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const ExpenseScalarFieldEnum = {
+  id: 'id',
+  amount: 'amount',
+  description: 'description',
+  date: 'date',
+  categoryId: 'categoryId',
+  companyId: 'companyId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ExpenseScalarFieldEnum = (typeof ExpenseScalarFieldEnum)[keyof typeof ExpenseScalarFieldEnum]
 
 
 export const SortOrder = {

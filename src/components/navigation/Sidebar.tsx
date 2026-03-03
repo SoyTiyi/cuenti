@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { LayoutDashboard, ShoppingCart, Package, Users, X } from "lucide-react";
+import { LayoutDashboard, ShoppingCart, Package, Users, TrendingDown, X } from "lucide-react";
 import NavItem from "./NavItem";
 import UserMenu from "./UserMenu";
 
@@ -25,6 +25,11 @@ const navigationItems = [
     href: "/clientes",
     icon: Users,
     label: "Clientes",
+  },
+  {
+    href: "/gastos",
+    icon: TrendingDown,
+    label: "Gastos",
   },
 ];
 

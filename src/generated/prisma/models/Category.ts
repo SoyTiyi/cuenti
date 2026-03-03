@@ -38,6 +38,7 @@ export type CategoryMinAggregateOutputType = {
   id: number | null
   name: string | null
   description: string | null
+  color: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -46,6 +47,7 @@ export type CategoryMaxAggregateOutputType = {
   id: number | null
   name: string | null
   description: string | null
+  color: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -54,6 +56,7 @@ export type CategoryCountAggregateOutputType = {
   id: number
   name: number
   description: number
+  color: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -72,6 +75,7 @@ export type CategoryMinAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  color?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -80,6 +84,7 @@ export type CategoryMaxAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  color?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -88,6 +93,7 @@ export type CategoryCountAggregateInputType = {
   id?: true
   name?: true
   description?: true
+  color?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -182,7 +188,8 @@ export type CategoryGroupByArgs<ExtArgs extends runtime.Types.Extensions.Interna
 export type CategoryGroupByOutputType = {
   id: number
   name: string
-  description: string
+  description: string | null
+  color: string | null
   createdAt: Date
   updatedAt: Date
   _count: CategoryCountAggregateOutputType | null
@@ -213,34 +220,41 @@ export type CategoryWhereInput = {
   NOT?: Prisma.CategoryWhereInput | Prisma.CategoryWhereInput[]
   id?: Prisma.IntFilter<"Category"> | number
   name?: Prisma.StringFilter<"Category"> | string
-  description?: Prisma.StringFilter<"Category"> | string
+  description?: Prisma.StringNullableFilter<"Category"> | string | null
+  color?: Prisma.StringNullableFilter<"Category"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
+  expenses?: Prisma.ExpenseListRelationFilter
 }
 
 export type CategoryOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  description?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  color?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  expenses?: Prisma.ExpenseOrderByRelationAggregateInput
 }
 
 export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   id?: number
+  name?: string
   AND?: Prisma.CategoryWhereInput | Prisma.CategoryWhereInput[]
   OR?: Prisma.CategoryWhereInput[]
   NOT?: Prisma.CategoryWhereInput | Prisma.CategoryWhereInput[]
-  name?: Prisma.StringFilter<"Category"> | string
-  description?: Prisma.StringFilter<"Category"> | string
+  description?: Prisma.StringNullableFilter<"Category"> | string | null
+  color?: Prisma.StringNullableFilter<"Category"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
-}, "id">
+  expenses?: Prisma.ExpenseListRelationFilter
+}, "id" | "name">
 
 export type CategoryOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
-  description?: Prisma.SortOrder
+  description?: Prisma.SortOrderInput | Prisma.SortOrder
+  color?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.CategoryCountOrderByAggregateInput
@@ -256,52 +270,63 @@ export type CategoryScalarWhereWithAggregatesInput = {
   NOT?: Prisma.CategoryScalarWhereWithAggregatesInput | Prisma.CategoryScalarWhereWithAggregatesInput[]
   id?: Prisma.IntWithAggregatesFilter<"Category"> | number
   name?: Prisma.StringWithAggregatesFilter<"Category"> | string
-  description?: Prisma.StringWithAggregatesFilter<"Category"> | string
+  description?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
+  color?: Prisma.StringNullableWithAggregatesFilter<"Category"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Category"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Category"> | Date | string
 }
 
 export type CategoryCreateInput = {
   name: string
-  description: string
+  description?: string | null
+  color?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  expenses?: Prisma.ExpenseCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryUncheckedCreateInput = {
   id?: number
   name: string
-  description: string
+  description?: string | null
+  color?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  expenses?: Prisma.ExpenseUncheckedCreateNestedManyWithoutCategoryInput
 }
 
 export type CategoryUpdateInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expenses?: Prisma.ExpenseUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryUncheckedUpdateInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  expenses?: Prisma.ExpenseUncheckedUpdateManyWithoutCategoryNestedInput
 }
 
 export type CategoryCreateManyInput = {
   id?: number
   name: string
-  description: string
+  description?: string | null
+  color?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
 
 export type CategoryUpdateManyMutationInput = {
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -309,7 +334,8 @@ export type CategoryUpdateManyMutationInput = {
 export type CategoryUncheckedUpdateManyInput = {
   id?: Prisma.IntFieldUpdateOperationsInput | number
   name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -318,6 +344,7 @@ export type CategoryCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -330,6 +357,7 @@ export type CategoryMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -338,6 +366,7 @@ export type CategoryMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  color?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -346,20 +375,122 @@ export type CategorySumOrderByAggregateInput = {
   id?: Prisma.SortOrder
 }
 
+export type CategoryScalarRelationFilter = {
+  is?: Prisma.CategoryWhereInput
+  isNot?: Prisma.CategoryWhereInput
+}
+
+export type CategoryCreateNestedOneWithoutExpensesInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutExpensesInput, Prisma.CategoryUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutExpensesInput
+  connect?: Prisma.CategoryWhereUniqueInput
+}
+
+export type CategoryUpdateOneRequiredWithoutExpensesNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutExpensesInput, Prisma.CategoryUncheckedCreateWithoutExpensesInput>
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutExpensesInput
+  upsert?: Prisma.CategoryUpsertWithoutExpensesInput
+  connect?: Prisma.CategoryWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.CategoryUpdateToOneWithWhereWithoutExpensesInput, Prisma.CategoryUpdateWithoutExpensesInput>, Prisma.CategoryUncheckedUpdateWithoutExpensesInput>
+}
+
+export type CategoryCreateWithoutExpensesInput = {
+  name: string
+  description?: string | null
+  color?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CategoryUncheckedCreateWithoutExpensesInput = {
+  id?: number
+  name: string
+  description?: string | null
+  color?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type CategoryCreateOrConnectWithoutExpensesInput = {
+  where: Prisma.CategoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutExpensesInput, Prisma.CategoryUncheckedCreateWithoutExpensesInput>
+}
+
+export type CategoryUpsertWithoutExpensesInput = {
+  update: Prisma.XOR<Prisma.CategoryUpdateWithoutExpensesInput, Prisma.CategoryUncheckedUpdateWithoutExpensesInput>
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutExpensesInput, Prisma.CategoryUncheckedCreateWithoutExpensesInput>
+  where?: Prisma.CategoryWhereInput
+}
+
+export type CategoryUpdateToOneWithWhereWithoutExpensesInput = {
+  where?: Prisma.CategoryWhereInput
+  data: Prisma.XOR<Prisma.CategoryUpdateWithoutExpensesInput, Prisma.CategoryUncheckedUpdateWithoutExpensesInput>
+}
+
+export type CategoryUpdateWithoutExpensesInput = {
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CategoryUncheckedUpdateWithoutExpensesInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+
+/**
+ * Count Type CategoryCountOutputType
+ */
+
+export type CategoryCountOutputType = {
+  expenses: number
+}
+
+export type CategoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  expenses?: boolean | CategoryCountOutputTypeCountExpensesArgs
+}
+
+/**
+ * CategoryCountOutputType without action
+ */
+export type CategoryCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the CategoryCountOutputType
+   */
+  select?: Prisma.CategoryCountOutputTypeSelect<ExtArgs> | null
+}
+
+/**
+ * CategoryCountOutputType without action
+ */
+export type CategoryCountOutputTypeCountExpensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ExpenseWhereInput
+}
 
 
 export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   description?: boolean
+  color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  expenses?: boolean | Prisma.Category$expensesArgs<ExtArgs>
+  _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["category"]>
 
 export type CategorySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
   name?: boolean
   description?: boolean
+  color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["category"]>
@@ -368,6 +499,7 @@ export type CategorySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   id?: boolean
   name?: boolean
   description?: boolean
+  color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["category"]>
@@ -376,19 +508,29 @@ export type CategorySelectScalar = {
   id?: boolean
   name?: boolean
   description?: boolean
+  color?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
+export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "color" | "createdAt" | "updatedAt", ExtArgs["result"]["category"]>
+export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  expenses?: boolean | Prisma.Category$expensesArgs<ExtArgs>
+  _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
+}
+export type CategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type CategoryIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
 
 export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Category"
-  objects: {}
+  objects: {
+    expenses: Prisma.$ExpensePayload<ExtArgs>[]
+  }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
     name: string
-    description: string
+    description: string | null
+    color: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["category"]>
@@ -785,6 +927,7 @@ readonly fields: CategoryFieldRefs;
  */
 export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  expenses<T extends Prisma.Category$expensesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$expensesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ExpensePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -817,6 +960,7 @@ export interface CategoryFieldRefs {
   readonly id: Prisma.FieldRef<"Category", 'Int'>
   readonly name: Prisma.FieldRef<"Category", 'String'>
   readonly description: Prisma.FieldRef<"Category", 'String'>
+  readonly color: Prisma.FieldRef<"Category", 'String'>
   readonly createdAt: Prisma.FieldRef<"Category", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Category", 'DateTime'>
 }
@@ -836,6 +980,10 @@ export type CategoryFindUniqueArgs<ExtArgs extends runtime.Types.Extensions.Inte
    */
   omit?: Prisma.CategoryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
+  /**
    * Filter, which Category to fetch.
    */
   where: Prisma.CategoryWhereUniqueInput
@@ -854,6 +1002,10 @@ export type CategoryFindUniqueOrThrowArgs<ExtArgs extends runtime.Types.Extensio
    */
   omit?: Prisma.CategoryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
+  /**
    * Filter, which Category to fetch.
    */
   where: Prisma.CategoryWhereUniqueInput
@@ -871,6 +1023,10 @@ export type CategoryFindFirstArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Omit specific fields from the Category
    */
   omit?: Prisma.CategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
   /**
    * Filter, which Category to fetch.
    */
@@ -920,6 +1076,10 @@ export type CategoryFindFirstOrThrowArgs<ExtArgs extends runtime.Types.Extension
    */
   omit?: Prisma.CategoryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
+  /**
    * Filter, which Category to fetch.
    */
   where?: Prisma.CategoryWhereInput
@@ -968,6 +1128,10 @@ export type CategoryFindManyArgs<ExtArgs extends runtime.Types.Extensions.Intern
    */
   omit?: Prisma.CategoryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
+  /**
    * Filter, which Categories to fetch.
    */
   where?: Prisma.CategoryWhereInput
@@ -1010,6 +1174,10 @@ export type CategoryCreateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Category
    */
   omit?: Prisma.CategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
   /**
    * The data needed to create a Category.
    */
@@ -1058,6 +1226,10 @@ export type CategoryUpdateArgs<ExtArgs extends runtime.Types.Extensions.Internal
    * Omit specific fields from the Category
    */
   omit?: Prisma.CategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
   /**
    * The data needed to update a Category.
    */
@@ -1125,6 +1297,10 @@ export type CategoryUpsertArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.CategoryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
+  /**
    * The filter to search for the Category to update in case it exists.
    */
   where: Prisma.CategoryWhereUniqueInput
@@ -1151,6 +1327,10 @@ export type CategoryDeleteArgs<ExtArgs extends runtime.Types.Extensions.Internal
    */
   omit?: Prisma.CategoryOmit<ExtArgs> | null
   /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
+  /**
    * Filter which Category to delete.
    */
   where: Prisma.CategoryWhereUniqueInput
@@ -1171,6 +1351,30 @@ export type CategoryDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
 }
 
 /**
+ * Category.expenses
+ */
+export type Category$expensesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Expense
+   */
+  select?: Prisma.ExpenseSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Expense
+   */
+  omit?: Prisma.ExpenseOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ExpenseInclude<ExtArgs> | null
+  where?: Prisma.ExpenseWhereInput
+  orderBy?: Prisma.ExpenseOrderByWithRelationInput | Prisma.ExpenseOrderByWithRelationInput[]
+  cursor?: Prisma.ExpenseWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ExpenseScalarFieldEnum | Prisma.ExpenseScalarFieldEnum[]
+}
+
+/**
  * Category without action
  */
 export type CategoryDefaultArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1182,4 +1386,8 @@ export type CategoryDefaultArgs<ExtArgs extends runtime.Types.Extensions.Interna
    * Omit specific fields from the Category
    */
   omit?: Prisma.CategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
 }

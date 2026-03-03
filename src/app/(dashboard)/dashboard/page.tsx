@@ -3,17 +3,20 @@
 import { Loader2 } from "lucide-react";
 import { useCompany } from "@/hooks/useCompany";
 import { useSales } from "@/hooks/useSales";
+import { useBalance } from "@/hooks/useBalance";
 import {
   DashboardGreeting,
   DashboardStats,
   DashboardCharts,
   UpcomingDueDates,
   RecentSales,
+  BalanceChart,
 } from "@/components/dashboard";
 
 export default function DashboardPage() {
   const { companyId, isLoading: isCompanyLoading, userName, companyName, companyImage, companyAddress } = useCompany();
   const { sales, isLoading: isSalesLoading, stats, last7Days, topServices } = useSales(companyId);
+  const { balance, summary, isLoading: isBalanceLoading } = useBalance(companyId, 6);
 
   const isLoading = isCompanyLoading || isSalesLoading;
 
@@ -25,6 +28,8 @@ export default function DashboardPage() {
         companyImage={companyImage}
         companyAddress={companyAddress}
       />
+
+      <BalanceChart balance={balance} summary={summary} isLoading={isBalanceLoading} />
 
       <DashboardStats stats={stats} isLoading={isLoading} />
 
