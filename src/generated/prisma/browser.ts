@@ -47,3 +47,8 @@ export type Sale = Prisma.SaleModel
  * 
  */
 export type Category = Prisma.CategoryModel
+/**
+ * Model Expense
+ * 
+ */
+export type Expense = Prisma.ExpenseModel
