@@ -23,7 +23,7 @@ const config: runtime.GetPrismaClientConfig = {
       "value": "prisma-client"
     },
     "output": {
-      "value": "/home/soytiyi/.openclaw/workspace/cuenti/src/generated/prisma",
+      "value": "/Users/soytiyi/Projects/cuenti/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -32,12 +32,12 @@ const config: runtime.GetPrismaClientConfig = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "debian-openssl-3.0.x",
+        "value": "darwin-arm64",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "/home/soytiyi/.openclaw/workspace/cuenti/prisma/schema.prisma",
+    "sourceFilePath": "/Users/soytiyi/Projects/cuenti/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativePath": "../../../prisma",
