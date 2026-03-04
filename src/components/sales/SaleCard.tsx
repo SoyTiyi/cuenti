@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, MessageCircle, Eye, Package, Loader2 } from "lucide-react";
+import { Check, Package, Loader2 } from "lucide-react";
 import { ClientAvatar, StatusBadge } from "@/components/ui";
 import { formatCurrency, formatDate } from "@/lib/utils/formatters";
 import type { Sale } from "@/lib/types/sale/type";
@@ -53,30 +53,18 @@ export function SaleCard({ sale, onMarkAsPaid }: SaleCardProps) {
               <Check size={16} />
               <span className="text-sm font-medium">Pagada</span>
             </div>
-            <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-success-600 hover:bg-success-50 rounded-lg transition-colors cursor-pointer">
-              <MessageCircle size={15} />
-              Recibo
-            </button>
+            {/* TODO: Botón "Recibo" - implementar en futuro */}
           </div>
         ) : (
-          <div className="flex items-center justify-between flex-wrap gap-2">
-            <button className="p-2 text-neutral-400 hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer">
-              <Eye size={18} />
+          <div className="flex items-center justify-end">
+            <button
+              onClick={handleMarkAsPaid}
+              disabled={isMarking}
+              className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-success-500 hover:bg-success-600 rounded-lg transition-colors cursor-pointer disabled:opacity-60"
+            >
+              {isMarking ? <Loader2 size={15} className="animate-spin" /> : <Check size={15} />}
+              Marcar pagada
             </button>
-            <div className="flex items-center gap-2 flex-wrap">
-              <button className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-warning-600 hover:bg-warning-50 rounded-lg transition-colors cursor-pointer">
-                <MessageCircle size={15} />
-                Recordar
-              </button>
-              <button
-                onClick={handleMarkAsPaid}
-                disabled={isMarking}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-success-500 hover:bg-success-600 rounded-lg transition-colors cursor-pointer disabled:opacity-60"
-              >
-                {isMarking ? <Loader2 size={15} className="animate-spin" /> : <Check size={15} />}
-                Marcar pagada
-              </button>
-            </div>
           </div>
         )}
       </div>
