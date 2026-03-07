@@ -1,15 +1,11 @@
 import prisma from "@/lib/prisma";
 import { CompleteOnboardingData } from "@/lib/types/onboarding/types";
-import { auth0 } from "@/lib/auth0";
 
 class OnboardingService {
-    async completeOnboarding(data: CompleteOnboardingData) {
+    async completeOnboarding(email: string, data: CompleteOnboardingData) {
         try {
-
-            const email = await auth0.getSession().then(session => session?.user?.email);
-
             if (!email) {
-                throw new Error("User email not found in session");
+                throw new Error("User email is required");
             }
 
             await prisma.company.create({
