@@ -67,13 +67,6 @@ const LoginPage = () => {
                             <span className="text-xs text-neutral-600 font-medium">Acceso Rápido</span>
                         </div>
                     </div>
-
-                    <p className="text-sm text-neutral-500">
-                        ¿Primera vez?{" "}
-                        <a href="/onboarding" className="text-primary-500 hover:text-primary-600 font-medium">
-                            Te ayudaremos a configurar todo →
-                        </a>
-                    </p>
                 </div>
             </div>
         </div>
