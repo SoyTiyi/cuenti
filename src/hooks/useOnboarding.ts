@@ -189,7 +189,7 @@ export function useOnboarding() {
         const formData = new FormData();
         formData.append("file", logo);
         formData.append("key", `logos/${Date.now()}_${logo.name}`);
-        formData.append("bucketName", "profile-pictures");
+        formData.append("bucketName", "cuenti-profile-pictures");
 
         const uploadResponse = await fetch("/api/upload", {
           method: "POST",

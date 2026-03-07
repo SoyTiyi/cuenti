@@ -4,7 +4,7 @@ import { Upload } from "@aws-sdk/lib-storage";
 
 class S3Service {
   private getS3Client() {
-    const region = process.env.AWS_REGION || "us-east-1";
+    const region = process.env.AWS_REGION || "us-east-2";
 
     if (process.env.ENVIRONMENT != "production") {
       return new S3Client({
