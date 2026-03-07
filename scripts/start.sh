@@ -15,7 +15,7 @@ echo "✅ PostgreSQL está listo"
 
 # Ejecutar migraciones de Prisma
 echo "📦 Ejecutando migraciones de base de datos..."
-npx prisma migrate deploy
+node ./node_modules/prisma/build/index.js migrate deploy
 
 echo "✅ Migraciones completadas"
 
