@@ -11,9 +11,16 @@ export default async function Home() {
 
   const dbUser = await userService.getUserByEmail(session.user.email || "");
 
-  if (!dbUser || dbUser.needsOnboarding) {
+  // Check activation status first
+  if (!dbUser?.isActive) {
+    redirect("/pending-activation");
+  }
+
+  // Then check onboarding
+  if (dbUser.needsOnboarding) {
     redirect("/onboarding");
   }
 
+  // Finally redirect to dashboard
   redirect("/dashboard");
 }

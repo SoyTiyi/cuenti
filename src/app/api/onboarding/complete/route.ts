@@ -1,26 +1,27 @@
 import { CompleteOnboardingData } from "@/lib/types/onboarding/types";
 import { onboardingService } from "@/service/OnboardingService";
-import { auth0 } from "@/lib/auth0";
+import { validateActiveSession } from "@/lib/auth-helpers";
 
 export async function POST(request: Request) {
-    try {
-        const session = await auth0.getSession();
-        const email = session?.user?.email;
+  // Validate active session
+  const { error, status, user } = await validateActiveSession();
 
-        if (!email) {
-            return new Response(
-                JSON.stringify({ message: "User not authenticated" }),
-                { status: 401 }
-            );
-        }
+  if (error) {
+    return Response.json({ message: error }, { status });
+  }
 
-        const data: CompleteOnboardingData = await request.json();
+  try {
+    const email = user!.email;
+    const data: CompleteOnboardingData = await request.json();
 
-        const result = await onboardingService.completeOnboarding(email, data);
+    const result = await onboardingService.completeOnboarding(email, data);
 
-        return new Response(JSON.stringify(result), { status: 200 });
-    } catch (error) {
-        console.error("Error processing onboarding data:", error);
-        return new Response(JSON.stringify({ message: "Error processing onboarding data" }), { status: 500 });
-    }
+    return new Response(JSON.stringify(result), { status: 200 });
+  } catch (error) {
+    console.error("Error processing onboarding data:", error);
+    return new Response(
+      JSON.stringify({ message: "Error processing onboarding data" }),
+      { status: 500 },
+    );
+  }
 }
