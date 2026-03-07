@@ -8,9 +8,6 @@ const CACHE_TTL = 60 * 1000; // 1 minute
 
 export async function GET() {
   try {
-    // Ensure defaults exist (runs once)
-    await categoryService.seedDefaultCategories();
-
     // Check cache
     const now = Date.now();
     if (cachedCategories && now - cacheTime < CACHE_TTL) {

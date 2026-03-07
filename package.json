@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "setup:minio": "tsx scripts/setup-minio-bucket.ts"
+    "setup:minio": "tsx scripts/setup-minio-bucket.ts",
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^4.15.0",

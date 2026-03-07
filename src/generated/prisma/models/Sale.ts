@@ -300,9 +300,9 @@ export type SaleWhereInput = {
   saleDate?: Prisma.DateTimeFilter<"Sale"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
+  client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   service?: Prisma.XOR<Prisma.ServiceScalarRelationFilter, Prisma.ServiceWhereInput>
-  client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
 }
 
 export type SaleOrderByWithRelationInput = {
@@ -319,9 +319,9 @@ export type SaleOrderByWithRelationInput = {
   saleDate?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  client?: Prisma.ClientOrderByWithRelationInput
   company?: Prisma.CompanyOrderByWithRelationInput
   service?: Prisma.ServiceOrderByWithRelationInput
-  client?: Prisma.ClientOrderByWithRelationInput
 }
 
 export type SaleWhereUniqueInput = Prisma.AtLeast<{
@@ -341,9 +341,9 @@ export type SaleWhereUniqueInput = Prisma.AtLeast<{
   saleDate?: Prisma.DateTimeFilter<"Sale"> | Date | string
   createdAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Sale"> | Date | string
+  client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
   company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   service?: Prisma.XOR<Prisma.ServiceScalarRelationFilter, Prisma.ServiceWhereInput>
-  client?: Prisma.XOR<Prisma.ClientScalarRelationFilter, Prisma.ClientWhereInput>
 }, "id">
 
 export type SaleOrderByWithAggregationInput = {
@@ -396,9 +396,9 @@ export type SaleCreateInput = {
   saleDate?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  client: Prisma.ClientCreateNestedOneWithoutSalesInput
   company: Prisma.CompanyCreateNestedOneWithoutSalesInput
   service: Prisma.ServiceCreateNestedOneWithoutSalesInput
-  client: Prisma.ClientCreateNestedOneWithoutSalesInput
 }
 
 export type SaleUncheckedCreateInput = {
@@ -427,9 +427,9 @@ export type SaleUpdateInput = {
   saleDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  client?: Prisma.ClientUpdateOneRequiredWithoutSalesNestedInput
   company?: Prisma.CompanyUpdateOneRequiredWithoutSalesNestedInput
   service?: Prisma.ServiceUpdateOneRequiredWithoutSalesNestedInput
-  client?: Prisma.ClientUpdateOneRequiredWithoutSalesNestedInput
 }
 
 export type SaleUncheckedUpdateInput = {
@@ -708,8 +708,8 @@ export type SaleCreateWithoutCompanyInput = {
   saleDate?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  service: Prisma.ServiceCreateNestedOneWithoutSalesInput
   client: Prisma.ClientCreateNestedOneWithoutSalesInput
+  service: Prisma.ServiceCreateNestedOneWithoutSalesInput
 }
 
 export type SaleUncheckedCreateWithoutCompanyInput = {
@@ -782,8 +782,8 @@ export type SaleCreateWithoutServiceInput = {
   saleDate?: Date | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  company: Prisma.CompanyCreateNestedOneWithoutSalesInput
   client: Prisma.ClientCreateNestedOneWithoutSalesInput
+  company: Prisma.CompanyCreateNestedOneWithoutSalesInput
 }
 
 export type SaleUncheckedCreateWithoutServiceInput = {
@@ -907,8 +907,8 @@ export type SaleUpdateWithoutCompanyInput = {
   saleDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  service?: Prisma.ServiceUpdateOneRequiredWithoutSalesNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutSalesNestedInput
+  service?: Prisma.ServiceUpdateOneRequiredWithoutSalesNestedInput
 }
 
 export type SaleUncheckedUpdateWithoutCompanyInput = {
@@ -966,8 +966,8 @@ export type SaleUpdateWithoutServiceInput = {
   saleDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  company?: Prisma.CompanyUpdateOneRequiredWithoutSalesNestedInput
   client?: Prisma.ClientUpdateOneRequiredWithoutSalesNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutSalesNestedInput
 }
 
 export type SaleUncheckedUpdateWithoutServiceInput = {
@@ -1075,9 +1075,9 @@ export type SaleSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   saleDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
-  client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["sale"]>
 
 export type SaleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1094,9 +1094,9 @@ export type SaleSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   saleDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
-  client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["sale"]>
 
 export type SaleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1113,9 +1113,9 @@ export type SaleSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   saleDate?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
-  client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["sale"]>
 
 export type SaleSelectScalar = {
@@ -1136,27 +1136,27 @@ export type SaleSelectScalar = {
 
 export type SaleOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "amount" | "isPaid" | "paidAmount" | "paymentDate" | "dueDate" | "notes" | "companyId" | "serviceId" | "clientId" | "saleDate" | "createdAt" | "updatedAt", ExtArgs["result"]["sale"]>
 export type SaleInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
-  client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
 }
 export type SaleIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
-  client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
 }
 export type SaleIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
   company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   service?: boolean | Prisma.ServiceDefaultArgs<ExtArgs>
-  client?: boolean | Prisma.ClientDefaultArgs<ExtArgs>
 }
 
 export type $SalePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Sale"
   objects: {
+    client: Prisma.$ClientPayload<ExtArgs>
     company: Prisma.$CompanyPayload<ExtArgs>
     service: Prisma.$ServicePayload<ExtArgs>
-    client: Prisma.$ClientPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1566,9 +1566,9 @@ readonly fields: SaleFieldRefs;
  */
 export interface Prisma__SaleClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
+  client<T extends Prisma.ClientDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientDefaultArgs<ExtArgs>>): Prisma.Prisma__ClientClient<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   service<T extends Prisma.ServiceDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ServiceDefaultArgs<ExtArgs>>): Prisma.Prisma__ServiceClient<runtime.Types.Result.GetResult<Prisma.$ServicePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-  client<T extends Prisma.ClientDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ClientDefaultArgs<ExtArgs>>): Prisma.Prisma__ClientClient<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.

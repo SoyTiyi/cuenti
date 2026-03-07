@@ -240,8 +240,8 @@ export type ServiceWhereInput = {
   companyId?: Prisma.IntFilter<"Service"> | number
   createdAt?: Prisma.DateTimeFilter<"Service"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Service"> | Date | string
-  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   sales?: Prisma.SaleListRelationFilter
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
 }
 
 export type ServiceOrderByWithRelationInput = {
@@ -252,8 +252,8 @@ export type ServiceOrderByWithRelationInput = {
   companyId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  company?: Prisma.CompanyOrderByWithRelationInput
   sales?: Prisma.SaleOrderByRelationAggregateInput
+  company?: Prisma.CompanyOrderByWithRelationInput
 }
 
 export type ServiceWhereUniqueInput = Prisma.AtLeast<{
@@ -267,8 +267,8 @@ export type ServiceWhereUniqueInput = Prisma.AtLeast<{
   companyId?: Prisma.IntFilter<"Service"> | number
   createdAt?: Prisma.DateTimeFilter<"Service"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Service"> | Date | string
-  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
   sales?: Prisma.SaleListRelationFilter
+  company?: Prisma.XOR<Prisma.CompanyScalarRelationFilter, Prisma.CompanyWhereInput>
 }, "id">
 
 export type ServiceOrderByWithAggregationInput = {
@@ -305,8 +305,8 @@ export type ServiceCreateInput = {
   price: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
-  company: Prisma.CompanyCreateNestedOneWithoutServicesInput
   sales?: Prisma.SaleCreateNestedManyWithoutServiceInput
+  company: Prisma.CompanyCreateNestedOneWithoutServicesInput
 }
 
 export type ServiceUncheckedCreateInput = {
@@ -326,8 +326,8 @@ export type ServiceUpdateInput = {
   price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  company?: Prisma.CompanyUpdateOneRequiredWithoutServicesNestedInput
   sales?: Prisma.SaleUpdateManyWithoutServiceNestedInput
+  company?: Prisma.CompanyUpdateOneRequiredWithoutServicesNestedInput
 }
 
 export type ServiceUncheckedUpdateInput = {
@@ -678,8 +678,8 @@ export type ServiceSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   companyId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   sales?: boolean | Prisma.Service$salesArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.ServiceCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["service"]>
 
@@ -717,8 +717,8 @@ export type ServiceSelectScalar = {
 
 export type ServiceOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "price" | "companyId" | "createdAt" | "updatedAt", ExtArgs["result"]["service"]>
 export type ServiceInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
-  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   sales?: boolean | Prisma.Service$salesArgs<ExtArgs>
+  company?: boolean | Prisma.CompanyDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.ServiceCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type ServiceIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -731,8 +731,8 @@ export type ServiceIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
 export type $ServicePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Service"
   objects: {
-    company: Prisma.$CompanyPayload<ExtArgs>
     sales: Prisma.$SalePayload<ExtArgs>[]
+    company: Prisma.$CompanyPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -1136,8 +1136,8 @@ readonly fields: ServiceFieldRefs;
  */
 export interface Prisma__ServiceClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
-  company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   sales<T extends Prisma.Service$salesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Service$salesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SalePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  company<T extends Prisma.CompanyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.CompanyDefaultArgs<ExtArgs>>): Prisma.Prisma__CompanyClient<runtime.Types.Result.GetResult<Prisma.$CompanyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
