@@ -28,6 +28,26 @@ model Company {
   address      String
   description  String
   companyImage String?
+  
+  // Contact info
+  phone        String?
+  email        String?
+  website      String?
+  
+  // Tax/Fiscal info
+  taxId        String?
+  taxName      String?
+  
+  // Settings
+  currency     String    @default("CLP")
+  timezone     String    @default("America/Santiago")
+  
+  // Business hours (JSON for flexibility)
+  businessHours Json?    // { monday: { open: "09:00", close: "18:00", isOpen: true }, ... }
+  
+  // Payment methods accepted
+  paymentMethods String[] @default([])
+  
   ownerId      Int
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt
