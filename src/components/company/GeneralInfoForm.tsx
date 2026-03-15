@@ -24,6 +24,7 @@ export function GeneralInfoForm({
         <LogoUploader
           currentLogo={data.companyImage || null}
           companyName={data.name || "N"}
+          companyAddress={data.address}
           onUpload={onLogoUpload}
           isUploading={isUploading}
         />

@@ -1,16 +1,22 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Camera, Loader2, X } from "lucide-react";
 
 interface LogoUploaderProps {
   currentLogo: string | null;
   companyName: string;
+  companyAddress?: string;
   onUpload: (file: File) => Promise<void>;
   isUploading?: boolean;
 }
 
-export function LogoUploader({ currentLogo, companyName, onUpload, isUploading }: LogoUploaderProps) {
+export function LogoUploader({ currentLogo, companyName, companyAddress, onUpload, isUploading }: LogoUploaderProps) {
   const [preview, setPreview] = useState<string | null>(currentLogo);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Sync preview with currentLogo prop when it changes
+  useEffect(() => {
+    setPreview(currentLogo);
+  }, [currentLogo]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -38,7 +44,7 @@ export function LogoUploader({ currentLogo, companyName, onUpload, isUploading }
     <div className="flex flex-col items-center gap-3">
       <div className="relative">
         {/* Logo preview */}
-        <div className="w-24 h-24 rounded-2xl bg-primary-100 flex items-center justify-center overflow-hidden border-2 border-dashed border-primary-300">
+        <div className="w-32 h-32 rounded-2xl bg-primary-100 flex items-center justify-center overflow-hidden border-2 border-dashed border-primary-300">
           {preview ? (
             <img
               src={preview}
@@ -46,7 +52,7 @@ export function LogoUploader({ currentLogo, companyName, onUpload, isUploading }
               className="w-full h-full object-cover"
             />
           ) : (
-            <span className="text-3xl font-bold text-primary-700">
+            <span className="text-4xl font-bold text-primary-700">
               {companyName.charAt(0).toUpperCase()}
             </span>
           )}
@@ -85,6 +91,14 @@ export function LogoUploader({ currentLogo, companyName, onUpload, isUploading }
         onChange={handleFileChange}
         className="hidden"
       />
+
+      {/* Company Name */}
+      <div className="text-center">
+        <h3 className="text-xl font-bold text-neutral-900">{companyName}</h3>
+        {companyAddress && (
+          <p className="text-sm text-neutral-600 mt-1">{companyAddress}</p>
+        )}
+      </div>
 
       <p className="text-xs text-neutral-500 text-center">
         Haz clic para cambiar el logo

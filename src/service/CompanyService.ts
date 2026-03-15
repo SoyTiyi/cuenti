@@ -40,6 +40,24 @@ class CompanyService {
       data: { companyImage: imageUrl },
     });
   }
+
+  async getCompanyByUserEmail(email: string) {
+    const user = await prisma.user.findUnique({
+      where: { email },
+      include: {
+        companies: {
+          take: 1,
+          orderBy: { createdAt: 'desc' }
+        }
+      }
+    });
+
+    if (!user || user.companies.length === 0) {
+      return null;
+    }
+
+    return user.companies[0];
+  }
 }
 
 export const companyService = new CompanyService();

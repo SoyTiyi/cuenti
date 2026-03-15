@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Settings, Building2 } from "lucide-react";
+import { Settings } from "lucide-react";
 import { useCompany } from "@/hooks/useCompany";
 import { useCompanyProfile } from "@/hooks/useCompanyProfile";
 import { CompanySettingsTabs } from "@/components/company";
@@ -108,27 +108,6 @@ export default function ConfiguracionPage() {
           </p>
         </div>
       </div>
-
-      {/* Company Card */}
-      {company && (
-        <div className="bg-white rounded-xl shadow-sm p-4 flex items-center gap-4">
-          <div className="w-14 h-14 rounded-xl bg-primary-100 flex items-center justify-center overflow-hidden">
-            {company.companyImage ? (
-              <img
-                src={company.companyImage}
-                alt={company.name}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <Building2 size={28} className="text-primary-500" />
-            )}
-          </div>
-          <div>
-            <h2 className="font-semibold text-neutral-900">{company.name}</h2>
-            <p className="text-sm text-neutral-500">{company.address}</p>
-          </div>
-        </div>
-      )}
 
       {/* Settings Tabs */}
       <CompanySettingsTabs
