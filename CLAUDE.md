@@ -13,6 +13,7 @@ npm run dev              # Start development server (port 3000)
 npm run build            # Build for production
 npm run lint             # Run ESLint
 npm run setup:minio      # Initialize MinIO storage buckets
+npm run seed             # Seed the database (prisma/seed.ts)
 
 npx prisma migrate dev   # Create and apply migrations
 npx prisma studio        # View/edit database in browser
@@ -28,9 +29,10 @@ docker-compose up        # Full stack (app + PostgreSQL + MinIO)
 
 ### Directory Structure
 - `src/app/` - Next.js App Router pages and API routes
-  - `(dashboard)/` - Protected dashboard pages (group routing)
-  - `api/` - REST API endpoints (12 resource routes)
+  - `(dashboard)/` - Protected dashboard pages; routes are in Spanish (clientes, gastos, servicios, ventas, configuracion)
+  - `api/` - REST API endpoints (14 resource routes)
   - `auth/` - Auth0 callback handling
+- `src/proxy.ts` - Auth0 middleware applied to all routes (used by `middleware.ts`)
 - `src/components/` - React components organized by feature (clients, sales, services, expenses, dashboard)
 - `src/service/` - Business logic services (AnalyticsService, SaleService, ExpenseService, etc.)
 - `src/hooks/` - Data fetching hooks (useSales, useExpenses, useClients, etc.)
@@ -40,9 +42,17 @@ docker-compose up        # Full stack (app + PostgreSQL + MinIO)
 
 ### Service Layer Pattern
 Business logic is encapsulated in `src/service/`. Each service handles one domain:
-- Services depend on Prisma client passed via constructor
-- Used by both API routes and server components
+- Services export a singleton instance (e.g., `export const companyService = new CompanyService()`)
+- Used by API routes directly; services import the shared Prisma client from `@/lib/prisma`
 - Example: `SaleService.create()`, `ExpenseService.getByCompany()`
+
+### API Route Conventions
+API routes use Next.js 15+ async params — always `await params` before use:
+```ts
+export async function GET(_req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+}
+```
 
 ### Multi-tenancy
 All data is scoped to Company. Users own companies, and all resources (services, clients, sales, expenses) belong to a company via `companyId` foreign key.
