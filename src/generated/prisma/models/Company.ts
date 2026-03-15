@@ -42,6 +42,13 @@ export type CompanyMinAggregateOutputType = {
   address: string | null
   description: string | null
   companyImage: string | null
+  phone: string | null
+  email: string | null
+  website: string | null
+  taxId: string | null
+  taxName: string | null
+  currency: string | null
+  timezone: string | null
   ownerId: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -53,6 +60,13 @@ export type CompanyMaxAggregateOutputType = {
   address: string | null
   description: string | null
   companyImage: string | null
+  phone: string | null
+  email: string | null
+  website: string | null
+  taxId: string | null
+  taxName: string | null
+  currency: string | null
+  timezone: string | null
   ownerId: number | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -64,6 +78,15 @@ export type CompanyCountAggregateOutputType = {
   address: number
   description: number
   companyImage: number
+  phone: number
+  email: number
+  website: number
+  taxId: number
+  taxName: number
+  currency: number
+  timezone: number
+  businessHours: number
+  paymentMethods: number
   ownerId: number
   createdAt: number
   updatedAt: number
@@ -87,6 +110,13 @@ export type CompanyMinAggregateInputType = {
   address?: true
   description?: true
   companyImage?: true
+  phone?: true
+  email?: true
+  website?: true
+  taxId?: true
+  taxName?: true
+  currency?: true
+  timezone?: true
   ownerId?: true
   createdAt?: true
   updatedAt?: true
@@ -98,6 +128,13 @@ export type CompanyMaxAggregateInputType = {
   address?: true
   description?: true
   companyImage?: true
+  phone?: true
+  email?: true
+  website?: true
+  taxId?: true
+  taxName?: true
+  currency?: true
+  timezone?: true
   ownerId?: true
   createdAt?: true
   updatedAt?: true
@@ -109,6 +146,15 @@ export type CompanyCountAggregateInputType = {
   address?: true
   description?: true
   companyImage?: true
+  phone?: true
+  email?: true
+  website?: true
+  taxId?: true
+  taxName?: true
+  currency?: true
+  timezone?: true
+  businessHours?: true
+  paymentMethods?: true
   ownerId?: true
   createdAt?: true
   updatedAt?: true
@@ -207,6 +253,15 @@ export type CompanyGroupByOutputType = {
   address: string
   description: string
   companyImage: string | null
+  phone: string | null
+  email: string | null
+  website: string | null
+  taxId: string | null
+  taxName: string | null
+  currency: string
+  timezone: string
+  businessHours: runtime.JsonValue | null
+  paymentMethods: string[]
   ownerId: number
   createdAt: Date
   updatedAt: Date
@@ -241,6 +296,15 @@ export type CompanyWhereInput = {
   address?: Prisma.StringFilter<"Company"> | string
   description?: Prisma.StringFilter<"Company"> | string
   companyImage?: Prisma.StringNullableFilter<"Company"> | string | null
+  phone?: Prisma.StringNullableFilter<"Company"> | string | null
+  email?: Prisma.StringNullableFilter<"Company"> | string | null
+  website?: Prisma.StringNullableFilter<"Company"> | string | null
+  taxId?: Prisma.StringNullableFilter<"Company"> | string | null
+  taxName?: Prisma.StringNullableFilter<"Company"> | string | null
+  currency?: Prisma.StringFilter<"Company"> | string
+  timezone?: Prisma.StringFilter<"Company"> | string
+  businessHours?: Prisma.JsonNullableFilter<"Company">
+  paymentMethods?: Prisma.StringNullableListFilter<"Company">
   ownerId?: Prisma.IntFilter<"Company"> | number
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
@@ -257,6 +321,15 @@ export type CompanyOrderByWithRelationInput = {
   address?: Prisma.SortOrder
   description?: Prisma.SortOrder
   companyImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  website?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxId?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxName?: Prisma.SortOrderInput | Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
+  businessHours?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentMethods?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -276,6 +349,15 @@ export type CompanyWhereUniqueInput = Prisma.AtLeast<{
   address?: Prisma.StringFilter<"Company"> | string
   description?: Prisma.StringFilter<"Company"> | string
   companyImage?: Prisma.StringNullableFilter<"Company"> | string | null
+  phone?: Prisma.StringNullableFilter<"Company"> | string | null
+  email?: Prisma.StringNullableFilter<"Company"> | string | null
+  website?: Prisma.StringNullableFilter<"Company"> | string | null
+  taxId?: Prisma.StringNullableFilter<"Company"> | string | null
+  taxName?: Prisma.StringNullableFilter<"Company"> | string | null
+  currency?: Prisma.StringFilter<"Company"> | string
+  timezone?: Prisma.StringFilter<"Company"> | string
+  businessHours?: Prisma.JsonNullableFilter<"Company">
+  paymentMethods?: Prisma.StringNullableListFilter<"Company">
   ownerId?: Prisma.IntFilter<"Company"> | number
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
@@ -292,6 +374,15 @@ export type CompanyOrderByWithAggregationInput = {
   address?: Prisma.SortOrder
   description?: Prisma.SortOrder
   companyImage?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  email?: Prisma.SortOrderInput | Prisma.SortOrder
+  website?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxId?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxName?: Prisma.SortOrderInput | Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
+  businessHours?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentMethods?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -311,6 +402,15 @@ export type CompanyScalarWhereWithAggregatesInput = {
   address?: Prisma.StringWithAggregatesFilter<"Company"> | string
   description?: Prisma.StringWithAggregatesFilter<"Company"> | string
   companyImage?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
+  phone?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
+  email?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
+  website?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
+  taxId?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
+  taxName?: Prisma.StringNullableWithAggregatesFilter<"Company"> | string | null
+  currency?: Prisma.StringWithAggregatesFilter<"Company"> | string
+  timezone?: Prisma.StringWithAggregatesFilter<"Company"> | string
+  businessHours?: Prisma.JsonNullableWithAggregatesFilter<"Company">
+  paymentMethods?: Prisma.StringNullableListFilter<"Company">
   ownerId?: Prisma.IntWithAggregatesFilter<"Company"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Company"> | Date | string
@@ -321,6 +421,15 @@ export type CompanyCreateInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   clients?: Prisma.ClientCreateNestedManyWithoutCompanyInput
@@ -336,6 +445,15 @@ export type CompanyUncheckedCreateInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   ownerId: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -350,6 +468,15 @@ export type CompanyUpdateInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clients?: Prisma.ClientUpdateManyWithoutCompanyNestedInput
@@ -365,6 +492,15 @@ export type CompanyUncheckedUpdateInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   ownerId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -380,6 +516,15 @@ export type CompanyCreateManyInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   ownerId: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -390,6 +535,15 @@ export type CompanyUpdateManyMutationInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -400,6 +554,15 @@ export type CompanyUncheckedUpdateManyInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   ownerId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -415,12 +578,29 @@ export type CompanyOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
+}
+
 export type CompanyCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   name?: Prisma.SortOrder
   address?: Prisma.SortOrder
   description?: Prisma.SortOrder
   companyImage?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  taxId?: Prisma.SortOrder
+  taxName?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
+  businessHours?: Prisma.SortOrder
+  paymentMethods?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -437,6 +617,13 @@ export type CompanyMaxOrderByAggregateInput = {
   address?: Prisma.SortOrder
   description?: Prisma.SortOrder
   companyImage?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  taxId?: Prisma.SortOrder
+  taxName?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -448,6 +635,13 @@ export type CompanyMinOrderByAggregateInput = {
   address?: Prisma.SortOrder
   description?: Prisma.SortOrder
   companyImage?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  email?: Prisma.SortOrder
+  website?: Prisma.SortOrder
+  taxId?: Prisma.SortOrder
+  taxName?: Prisma.SortOrder
+  currency?: Prisma.SortOrder
+  timezone?: Prisma.SortOrder
   ownerId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -503,6 +697,15 @@ export type CompanyUncheckedUpdateManyWithoutOwnerNestedInput = {
   update?: Prisma.CompanyUpdateWithWhereUniqueWithoutOwnerInput | Prisma.CompanyUpdateWithWhereUniqueWithoutOwnerInput[]
   updateMany?: Prisma.CompanyUpdateManyWithWhereWithoutOwnerInput | Prisma.CompanyUpdateManyWithWhereWithoutOwnerInput[]
   deleteMany?: Prisma.CompanyScalarWhereInput | Prisma.CompanyScalarWhereInput[]
+}
+
+export type CompanyCreatepaymentMethodsInput = {
+  set: string[]
+}
+
+export type CompanyUpdatepaymentMethodsInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type CompanyCreateNestedOneWithoutServicesInput = {
@@ -566,6 +769,15 @@ export type CompanyCreateWithoutOwnerInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   clients?: Prisma.ClientCreateNestedManyWithoutCompanyInput
@@ -580,6 +792,15 @@ export type CompanyUncheckedCreateWithoutOwnerInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   clients?: Prisma.ClientUncheckedCreateNestedManyWithoutCompanyInput
@@ -623,6 +844,15 @@ export type CompanyScalarWhereInput = {
   address?: Prisma.StringFilter<"Company"> | string
   description?: Prisma.StringFilter<"Company"> | string
   companyImage?: Prisma.StringNullableFilter<"Company"> | string | null
+  phone?: Prisma.StringNullableFilter<"Company"> | string | null
+  email?: Prisma.StringNullableFilter<"Company"> | string | null
+  website?: Prisma.StringNullableFilter<"Company"> | string | null
+  taxId?: Prisma.StringNullableFilter<"Company"> | string | null
+  taxName?: Prisma.StringNullableFilter<"Company"> | string | null
+  currency?: Prisma.StringFilter<"Company"> | string
+  timezone?: Prisma.StringFilter<"Company"> | string
+  businessHours?: Prisma.JsonNullableFilter<"Company">
+  paymentMethods?: Prisma.StringNullableListFilter<"Company">
   ownerId?: Prisma.IntFilter<"Company"> | number
   createdAt?: Prisma.DateTimeFilter<"Company"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Company"> | Date | string
@@ -633,6 +863,15 @@ export type CompanyCreateWithoutServicesInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   clients?: Prisma.ClientCreateNestedManyWithoutCompanyInput
@@ -647,6 +886,15 @@ export type CompanyUncheckedCreateWithoutServicesInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   ownerId: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -676,6 +924,15 @@ export type CompanyUpdateWithoutServicesInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clients?: Prisma.ClientUpdateManyWithoutCompanyNestedInput
@@ -690,6 +947,15 @@ export type CompanyUncheckedUpdateWithoutServicesInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   ownerId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -703,6 +969,15 @@ export type CompanyCreateWithoutClientsInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutCompaniesInput
@@ -717,6 +992,15 @@ export type CompanyUncheckedCreateWithoutClientsInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   ownerId: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -746,6 +1030,15 @@ export type CompanyUpdateWithoutClientsInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutCompaniesNestedInput
@@ -760,6 +1053,15 @@ export type CompanyUncheckedUpdateWithoutClientsInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   ownerId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -773,6 +1075,15 @@ export type CompanyCreateWithoutSalesInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   clients?: Prisma.ClientCreateNestedManyWithoutCompanyInput
@@ -787,6 +1098,15 @@ export type CompanyUncheckedCreateWithoutSalesInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   ownerId: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -816,6 +1136,15 @@ export type CompanyUpdateWithoutSalesInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clients?: Prisma.ClientUpdateManyWithoutCompanyNestedInput
@@ -830,6 +1159,15 @@ export type CompanyUncheckedUpdateWithoutSalesInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   ownerId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -843,6 +1181,15 @@ export type CompanyCreateWithoutExpensesInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
   clients?: Prisma.ClientCreateNestedManyWithoutCompanyInput
@@ -857,6 +1204,15 @@ export type CompanyUncheckedCreateWithoutExpensesInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   ownerId: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -886,6 +1242,15 @@ export type CompanyUpdateWithoutExpensesInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clients?: Prisma.ClientUpdateManyWithoutCompanyNestedInput
@@ -900,6 +1265,15 @@ export type CompanyUncheckedUpdateWithoutExpensesInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   ownerId?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -914,6 +1288,15 @@ export type CompanyCreateManyOwnerInput = {
   address: string
   description: string
   companyImage?: string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  taxId?: string | null
+  taxName?: string | null
+  currency?: string
+  timezone?: string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyCreatepaymentMethodsInput | string[]
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -923,6 +1306,15 @@ export type CompanyUpdateWithoutOwnerInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clients?: Prisma.ClientUpdateManyWithoutCompanyNestedInput
@@ -937,6 +1329,15 @@ export type CompanyUncheckedUpdateWithoutOwnerInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   clients?: Prisma.ClientUncheckedUpdateManyWithoutCompanyNestedInput
@@ -951,6 +1352,15 @@ export type CompanyUncheckedUpdateManyWithoutOwnerInput = {
   address?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   companyImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  currency?: Prisma.StringFieldUpdateOperationsInput | string
+  timezone?: Prisma.StringFieldUpdateOperationsInput | string
+  businessHours?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  paymentMethods?: Prisma.CompanyUpdatepaymentMethodsInput | string[]
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1019,6 +1429,15 @@ export type CompanySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   address?: boolean
   description?: boolean
   companyImage?: boolean
+  phone?: boolean
+  email?: boolean
+  website?: boolean
+  taxId?: boolean
+  taxName?: boolean
+  currency?: boolean
+  timezone?: boolean
+  businessHours?: boolean
+  paymentMethods?: boolean
   ownerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1036,6 +1455,15 @@ export type CompanySelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   address?: boolean
   description?: boolean
   companyImage?: boolean
+  phone?: boolean
+  email?: boolean
+  website?: boolean
+  taxId?: boolean
+  taxName?: boolean
+  currency?: boolean
+  timezone?: boolean
+  businessHours?: boolean
+  paymentMethods?: boolean
   ownerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1048,6 +1476,15 @@ export type CompanySelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   address?: boolean
   description?: boolean
   companyImage?: boolean
+  phone?: boolean
+  email?: boolean
+  website?: boolean
+  taxId?: boolean
+  taxName?: boolean
+  currency?: boolean
+  timezone?: boolean
+  businessHours?: boolean
+  paymentMethods?: boolean
   ownerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1060,12 +1497,21 @@ export type CompanySelectScalar = {
   address?: boolean
   description?: boolean
   companyImage?: boolean
+  phone?: boolean
+  email?: boolean
+  website?: boolean
+  taxId?: boolean
+  taxName?: boolean
+  currency?: boolean
+  timezone?: boolean
+  businessHours?: boolean
+  paymentMethods?: boolean
   ownerId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "address" | "description" | "companyImage" | "ownerId" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
+export type CompanyOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "address" | "description" | "companyImage" | "phone" | "email" | "website" | "taxId" | "taxName" | "currency" | "timezone" | "businessHours" | "paymentMethods" | "ownerId" | "createdAt" | "updatedAt", ExtArgs["result"]["company"]>
 export type CompanyInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   clients?: boolean | Prisma.Company$clientsArgs<ExtArgs>
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1096,6 +1542,15 @@ export type $CompanyPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     address: string
     description: string
     companyImage: string | null
+    phone: string | null
+    email: string | null
+    website: string | null
+    taxId: string | null
+    taxName: string | null
+    currency: string
+    timezone: string
+    businessHours: runtime.JsonValue | null
+    paymentMethods: string[]
     ownerId: number
     createdAt: Date
     updatedAt: Date
@@ -1532,6 +1987,15 @@ export interface CompanyFieldRefs {
   readonly address: Prisma.FieldRef<"Company", 'String'>
   readonly description: Prisma.FieldRef<"Company", 'String'>
   readonly companyImage: Prisma.FieldRef<"Company", 'String'>
+  readonly phone: Prisma.FieldRef<"Company", 'String'>
+  readonly email: Prisma.FieldRef<"Company", 'String'>
+  readonly website: Prisma.FieldRef<"Company", 'String'>
+  readonly taxId: Prisma.FieldRef<"Company", 'String'>
+  readonly taxName: Prisma.FieldRef<"Company", 'String'>
+  readonly currency: Prisma.FieldRef<"Company", 'String'>
+  readonly timezone: Prisma.FieldRef<"Company", 'String'>
+  readonly businessHours: Prisma.FieldRef<"Company", 'Json'>
+  readonly paymentMethods: Prisma.FieldRef<"Company", 'String[]'>
   readonly ownerId: Prisma.FieldRef<"Company", 'Int'>
   readonly createdAt: Prisma.FieldRef<"Company", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Company", 'DateTime'>
