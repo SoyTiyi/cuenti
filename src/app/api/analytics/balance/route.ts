@@ -1,7 +1,15 @@
 import { analyticsService } from "@/service/AnalyticsService";
 import { apiCache } from "@/lib/cache";
+import { validateActiveSession } from "@/lib/auth-helpers";
 
 export async function GET(request: Request) {
+  // Validate active session
+  const { error, status } = await validateActiveSession();
+
+  if (error) {
+    return Response.json({ message: error }, { status });
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const companyId = searchParams.get("companyId");

@@ -26,7 +26,14 @@ export const auth0 = new Auth0Client({
         });
 
         return NextResponse.redirect(
-          new URL("/onboarding", process.env.APP_BASE_URL),
+          new URL("/pending-activation", process.env.APP_BASE_URL),
+        );
+      }
+
+      // Check activation status before onboarding
+      if (!existingUser.isActive) {
+        return NextResponse.redirect(
+          new URL("/pending-activation", process.env.APP_BASE_URL),
         );
       }
 

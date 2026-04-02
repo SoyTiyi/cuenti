@@ -1,9 +1,17 @@
 import { saleService } from "@/service/SaleService";
+import { validateActiveSession } from "@/lib/auth-helpers";
 
 export async function PATCH(
   _request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
+  // Validate active session
+  const { error, status } = await validateActiveSession();
+
+  if (error) {
+    return Response.json({ message: error }, { status });
+  }
+
   try {
     const { id } = await params;
     const sale = await saleService.markAsPaid(Number(id));
